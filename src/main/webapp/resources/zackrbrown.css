@@ -1,0 +1,90 @@
+@IMPORT url("//fonts.googleapis.com/css?family=Roboto");
+
+html {
+    background: url("//upload.wikimedia.org/wikipedia/commons/d/d5/Kansas_City_MO_Skyline_14July2008.jpg");
+    background-color: #CCCCCC;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+div.header {
+    background-color: #000088;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4em;
+    box-shadow: 0 0 8px 0 #000000;
+}
+
+ul.headerLinkContainer {
+    margin: 0;
+    padding: 0 0 0 10px;
+    position: absolute;
+    bottom: 0;
+}
+
+ul.headerLinkContainer > li {
+    display: inline-block;
+    padding-left: 7px;
+}
+
+ul.headerLinkContainer > li > a {
+    font-family: Roboto;
+    font-size: 2em;
+    text-decoration: none;
+    color: #556699;
+}
+
+ul.headerLinkContainer > li > a:hover {
+    color: #7788BB;
+    font-weight: bold;
+}
+
+ul.headerLinkContainer > li > a::after {
+    display: block;
+    content: attr(title);
+    font-weight: bold;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+div.headerIconContainer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 4px
+}
+
+a.headerIcon {
+    color: #556699;
+    padding-right: 6px;
+}
+
+a.headerIcon:hover {
+    color: #7788BB;
+}
+
+div.contentContainer {
+    background-color: #FFFFFF;
+    position: relative;
+    top: 5em;
+    left: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    box-shadow: 2px 2px 5px 1px #000000;
+    padding: 1em 2em 1em 2em;
+}
+
+h1.contentTitle {
+    font-family: Roboto;
+    text-align: center;
+    color: #445588;
+}
+
+p.content {
+    font-family: Roboto;
+    text-align: justify;
+}
