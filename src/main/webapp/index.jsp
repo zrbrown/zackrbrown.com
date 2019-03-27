@@ -12,9 +12,9 @@
 <body>
 <div class="header">
     <ul class="headerLinkContainer">
-        <li><a href="" title="Home">Home</a></li>
+        <li><a href="" title="Blog">Blog</a></li>
+        <li><a href="" title="Projects">Projects</a></li>
         <li><a href="" title="About">About</a></li>
-        <li><a href="" title="Resume">Resume</a></li>
     </ul>
     <div class="headerIconContainer">
         <a href="//github.com/zrbrown" class="headerIcon"><span class="fa fa-github fa-2x"></span></a>
