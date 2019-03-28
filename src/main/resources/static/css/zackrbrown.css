@@ -1,7 +1,8 @@
 @IMPORT url("//fonts.googleapis.com/css?family=Roboto");
 
 html {
-    background: url("//upload.wikimedia.org/wikipedia/commons/d/d5/Kansas_City_MO_Skyline_14July2008.jpg");
+    /*background: url("//upload.wikimedia.org/wikipedia/commons/d/d5/Kansas_City_MO_Skyline_14July2008.jpg");*/
+    background: url("//fortunedotcom.files.wordpress.com/2017/10/gettyimages-483792143.jpg");
     background-color: #CCCCCC;
     background-size: cover;
     background-repeat: no-repeat;
