@@ -30,7 +30,7 @@ ul.headerLinkContainer > li {
 }
 
 ul.headerLinkContainer > li > a {
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     font-size: 2em;
     text-decoration: none;
     color: #556699;
@@ -70,21 +70,19 @@ div.contentContainer {
     background-color: #FFFFFF;
     position: relative;
     top: 5em;
-    left: 2em;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 1em auto;
     width: 70%;
     box-shadow: 2px 2px 5px 1px #000000;
     padding: 1em 2em 1em 2em;
 }
 
 h1.contentTitle {
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     text-align: center;
     color: #445588;
 }
 
 p.content {
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     text-align: justify;
 }
