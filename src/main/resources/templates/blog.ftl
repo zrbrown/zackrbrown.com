@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Zack Brown</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="resources/zackrbrown.css">
+    <link rel="stylesheet" href="/css/zackrbrown.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 
@@ -24,7 +24,7 @@
     </div>
 </div>
 <div class="contentContainer">
-    <h1 class="contentTitle">Hello World!</h1>
+    <h1 class="contentTitle">Hello ${name}!</h1>
     <p class="content">I'm Zack Brown, a Software Engineer from Kansas City.</p>
 </div>
 </body>
