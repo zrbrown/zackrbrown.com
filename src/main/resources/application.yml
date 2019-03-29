@@ -1,2 +1,9 @@
 spring.freemarker.template-loader-path: classpath:/templates
 spring.freemarker.suffix: .ftl
+
+spring:
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://zackrbrowncom-db.postgres.database.azure.com:5432/zackrbrowncom
+    username: zackrbrown
+    password:
