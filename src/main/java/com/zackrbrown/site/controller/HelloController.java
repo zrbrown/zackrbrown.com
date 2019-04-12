@@ -12,5 +12,4 @@ public class HelloController {
         model.addAttribute("name", "World");
         return "blog";
     }
-
 }

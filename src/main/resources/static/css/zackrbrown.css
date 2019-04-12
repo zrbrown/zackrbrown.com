@@ -75,6 +75,7 @@ div.contentContainer {
     width: 70%;
     box-shadow: 2px 2px 5px 1px #000000;
     padding: 1em 2em 1em 2em;
+    max-width: 46em;
 }
 
 h1.contentTitle {
@@ -83,7 +84,39 @@ h1.contentTitle {
     color: #445588;
 }
 
+.contentTitleEditContainer {
+    text-align: center;
+}
+
+input.contentTitleEdit {
+    font-size: 2.5em;
+    text-align: center;
+}
+
 p.content {
     font-family: Roboto, sans-serif;
-    text-align: justify;
+    font-size: 1.1em;
+    line-height: 1.3;
+}
+
+.postActionContainer {
+    text-align: right;
+}
+
+button.postAction {
+    font-family: Roboto, sans-serif;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: none;
+    padding: 5px 15px;
+    background-color: #000088;
+}
+
+button.postAction:hover,
+button.postAction:focus {
+    background-color: #7788BB;
+}
+
+button.postAction:active {
+    background-color: #000055;
 }
