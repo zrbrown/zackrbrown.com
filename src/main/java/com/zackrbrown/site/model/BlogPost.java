@@ -1,4 +1,4 @@
-package model;
+package com.zackrbrown.site.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

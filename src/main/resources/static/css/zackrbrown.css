@@ -67,7 +67,7 @@ a.headerIcon:hover {
     color: #7788BB;
 }
 
-div.contentContainer {
+div.content-container {
     background-color: #FFFFFF;
     position: relative;
     top: 5em;
@@ -78,17 +78,17 @@ div.contentContainer {
     max-width: 46em;
 }
 
-h1.contentTitle {
+h1.post-title {
     font-family: Roboto, sans-serif;
     text-align: center;
     color: #445588;
 }
 
-.contentTitleEditContainer {
+.content-title-edit-container {
     text-align: center;
 }
 
-input.contentTitleEdit {
+input.content-title-edit {
     font-size: 2.5em;
     text-align: center;
 }
@@ -99,11 +99,11 @@ p.content {
     line-height: 1.5;
 }
 
-.postActionContainer {
+.post-action-container {
     text-align: right;
 }
 
-button.postAction {
+button.post-action {
     font-family: Roboto, sans-serif;
     color: #FFFFFF;
     border: none;
@@ -112,11 +112,11 @@ button.postAction {
     background-color: #000088;
 }
 
-button.postAction:hover,
-button.postAction:focus {
+button.post-action:hover,
+button.post-action:focus {
     background-color: #7788BB;
 }
 
-button.postAction:active {
+button.post-action:active {
     background-color: #000055;
 }
