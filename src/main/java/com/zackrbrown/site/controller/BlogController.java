@@ -12,12 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 @Controller
+@RequestMapping("/blog")
 public class BlogController {
 
     private final PostRepository postRepository;
@@ -26,7 +29,7 @@ public class BlogController {
         this.postRepository = postRepository;
     }
 
-    @GetMapping("/blog")
+    @GetMapping
     public String blog(Model model) {
         Optional<Post> latestPost = postRepository.findAll(
                 PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
@@ -47,9 +50,24 @@ public class BlogController {
         return "blog";
     }
 
+    @GetMapping("/edit")
+    public String edit(Principal principal) {
+        // TODO pull from config
+        if (!"zrbrown".equals(principal.getName())) {
+            return "redirect:/blog";
+        }
+
+        return "admin/blog_edit";
+    }
+
     // TODO use RETHROW in production
-    @PostMapping("/blog")
-    public String postBlogEntry(FormBlogPost blogPost, Model model) {
+    @PostMapping("/edit")
+    public String postBlogEntry(FormBlogPost blogPost, Principal principal) {
+        // TODO pull from config
+        if (!"zrbrown".equals(principal.getName())) {
+            return "redirect:/blog";
+        }
+
         Post post = new Post(
                 UUID.randomUUID(),
                 "test-post",
@@ -58,14 +76,6 @@ public class BlogController {
                 LocalDateTime.now());
         postRepository.save(post);
 
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(blogPost.getPostContent());
-        HtmlRenderer renderer = HtmlRenderer.builder().build();
-        String renderedContent = renderer.render(document);
-
-        model.addAttribute("postTitle", blogPost.getPostTitle());
-        model.addAttribute("postContent", renderedContent);
-
-        return "blog";
+        return "redirect:/blog";
     }
 }
