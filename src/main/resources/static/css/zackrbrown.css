@@ -84,6 +84,10 @@ h1.post-title {
     color: #445588;
 }
 
+span.post-date {
+    font-style: italic;
+}
+
 .content-title-edit-container {
     text-align: center;
 }

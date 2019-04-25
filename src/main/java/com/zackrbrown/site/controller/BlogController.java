@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,9 +42,11 @@ public class BlogController {
             String renderedContent = renderer.render(document);
 
             model.addAttribute("postTitle", latestPost.get().getTitle());
+            model.addAttribute("postDate", latestPost.get().getCreatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
             model.addAttribute("postContent", renderedContent);
         } else {
             model.addAttribute("postTitle", "");
+            model.addAttribute("postDate", "");
             model.addAttribute("postContent", "");
         }
 

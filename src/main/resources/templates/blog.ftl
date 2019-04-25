@@ -15,6 +15,7 @@
 
 <div class="content-container">
     <h1 class="post-title">${postTitle}</h1>
+    <span class="post-date">${postDate}</span>
     <p class="post-content">${postContent}</p>
 </div>
 
