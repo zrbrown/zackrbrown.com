@@ -14,9 +14,17 @@
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
-    <h1 class="post-title">${postTitle}</h1>
+    <div class="post-title">${postTitle}</div>
     <span class="post-date">${postDate}</span>
     <p class="post-content">${postContent}</p>
+    <div class="navigation-buttons">
+        <#if showPrevious>
+            <div class="previous-post"><a href="/blog?post=${previousPost}">&lt;&lt; Older</a></div>
+        </#if>
+        <#if showNext>
+            <div class="next-post"><a href="/blog?post=${nextPost}">Newer &gt;&gt;</a></div>
+        </#if>
+    </div>
 </div>
 
 </body>

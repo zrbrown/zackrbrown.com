@@ -8,6 +8,12 @@ html {
     background-repeat: no-repeat;
 }
 
+a {
+    font-family: Roboto, sans-serif;
+    text-decoration: none;
+    color: #000088;
+}
+
 div.header {
     background-color: #000088;
     position: fixed;
@@ -78,14 +84,28 @@ div.content-container {
     max-width: 46em;
 }
 
-h1.post-title {
+div.post-title {
     font-family: Roboto, sans-serif;
-    text-align: center;
+    font-size: 3.5em;
     color: #445588;
+    padding: 0 0 10px 0;
 }
 
 span.post-date {
     font-style: italic;
+}
+
+div.navigation-buttons {
+    display: inline-block;
+    width: 100%;
+}
+
+div.previous-post {
+    float: left;
+}
+
+div.next-post {
+    float: right;
 }
 
 .content-title-edit-container {
