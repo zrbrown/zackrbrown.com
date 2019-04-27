@@ -31,8 +31,14 @@ CREATE TABLE IF NOT EXISTS tags
 
 CREATE TABLE IF NOT EXISTS posts_to_tags
 (
-    post_id UUID PRIMARY KEY,
+    post_id UUID,
     tag_id  UUID,
     FOREIGN KEY (tag_id) REFERENCES tags (id),
     FOREIGN KEY (post_id) REFERENCES posts (id)
 );
+
+CREATE INDEX IF NOT EXISTS posts_to_tags_post_index
+    ON posts_to_tags (post_id);
+
+CREATE INDEX IF NOT EXISTS posts_to_tags_tag_index
+    ON posts_to_tags (tag_id);

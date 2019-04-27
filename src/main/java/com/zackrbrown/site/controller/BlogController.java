@@ -2,6 +2,8 @@ package com.zackrbrown.site.controller;
 
 import com.zackrbrown.site.dao.Post;
 import com.zackrbrown.site.dao.PostRepository;
+import com.zackrbrown.site.dao.Tag;
+import com.zackrbrown.site.dao.TagRepository;
 import com.zackrbrown.site.model.FormBlogPost;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -18,17 +20,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/blog")
 public class BlogController {
 
     private final PostRepository postRepository;
+    private final TagRepository tagRepository;
 
-    public BlogController(PostRepository postRepository) {
+    public BlogController(PostRepository postRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
+        this.tagRepository = tagRepository;
     }
 
     @GetMapping
@@ -37,7 +44,10 @@ public class BlogController {
                 PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
                 .get().findFirst();
         if (latestPost.isPresent()) {
-            renderPost(model, latestPost.get());
+            List<String> tags = tagRepository.getAllByPosts(Collections.singleton(latestPost.get())).stream()
+                    .map(Tag::getName)
+                    .collect(Collectors.toList());
+            renderPost(model, latestPost.get(), tags);
 
             Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
                     latestPost.get().getCreatedDateTime(),
@@ -63,7 +73,11 @@ public class BlogController {
         Optional<Post> requestedPost = postRepository.getByUrlName(postUrlName);
 
         if (requestedPost.isPresent()) {
-            renderPost(model, requestedPost.get());
+            List<String> tags = tagRepository.getAllByPosts(Collections.singleton(requestedPost.get())).stream()
+                    .map(Tag::getName)
+                    .collect(Collectors.toList());
+
+            renderPost(model, requestedPost.get(), tags);
 
             Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
                     requestedPost.get().getCreatedDateTime(),
@@ -85,15 +99,17 @@ public class BlogController {
         return "blog";
     }
 
-    private void renderPost(Model model, Post post) {
+    private void renderPost(Model model, Post post, List<String> tags) {
+        model.addAttribute("postTitle", post.getTitle());
+        model.addAttribute("postDate", post.getCreatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
+
         Parser parser = Parser.builder().build();
         Node document = parser.parse(post.getContent());
         HtmlRenderer renderer = HtmlRenderer.builder().build();
         String renderedContent = renderer.render(document);
-
-        model.addAttribute("postTitle", post.getTitle());
-        model.addAttribute("postDate", post.getCreatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
         model.addAttribute("postContent", renderedContent);
+
+        model.addAttribute("tags", tags);
     }
 
     @GetMapping("/{postUrlName}/edit")

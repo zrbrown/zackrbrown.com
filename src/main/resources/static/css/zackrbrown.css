@@ -123,6 +123,23 @@ p.content {
     line-height: 1.5;
 }
 
+.tag-container {
+    display: inline-block;
+    width: 100%;
+}
+
+.tag-wrapper {
+    background-color: #000088;
+    border-radius: 4px;
+    padding: 3px 5px;
+    margin: 2px;
+    float: left;
+}
+
+.tag {
+    color: #FFFFFF;
+}
+
 .post-action-container {
     text-align: right;
 }

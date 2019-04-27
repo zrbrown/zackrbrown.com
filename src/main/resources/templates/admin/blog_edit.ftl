@@ -25,6 +25,7 @@
         </div>
         <br/>
         <textarea title="Post content" id="editor" name="postContent">${postContent}</textarea>
+        <div class="tag-container"></div>
         <div class="post-action-container">
             <button type="submit" class="post-action">Post</button>
         </div>

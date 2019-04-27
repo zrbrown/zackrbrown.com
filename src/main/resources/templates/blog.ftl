@@ -17,12 +17,21 @@
     <div class="post-title">${postTitle}</div>
     <span class="post-date">${postDate}</span>
     <p class="post-content">${postContent}</p>
+    <#list tags>
+        <div class="tag-container">
+            <#items as tag>
+                <div class="tag-wrapper">
+                    <a href="" class="tag">${tag}</a>
+                </div>
+            </#items>
+        </div>
+    </#list>
     <div class="navigation-buttons">
         <#if showPrevious>
-            <div class="previous-post"><a href="/blog/${previousPost}">&lt;&lt; Older</a></div>
+            <div class="previous-post"><a href="/blog/${previousPost}">&larr; Older</a></div>
         </#if>
         <#if showNext>
-            <div class="next-post"><a href="/blog/${nextPost}">Newer &gt;&gt;</a></div>
+            <div class="next-post"><a href="/blog/${nextPost}">Newer &rarr;</a></div>
         </#if>
     </div>
 </div>
