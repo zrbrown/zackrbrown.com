@@ -140,6 +140,14 @@ p.content {
     color: #FFFFFF;
 }
 
+.tag:hover {
+    color: #35A5FF;
+}
+
+.add-tag {
+    margin: 7px 2px;
+}
+
 .post-action-container {
     text-align: right;
 }

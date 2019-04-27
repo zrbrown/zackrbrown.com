@@ -129,6 +129,11 @@ public class BlogController {
         model.addAttribute("postContent", post.get().getContent());
         model.addAttribute("submitPath", "/blog/" + postUrlName + "/edit");
 
+        List<String> tags = tagRepository.getAllByPosts(Collections.singleton(post.get())).stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
+        model.addAttribute("tags", tags);
+
         return "admin/blog_edit";
     }
 

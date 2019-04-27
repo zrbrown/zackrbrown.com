@@ -2,6 +2,7 @@
 
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="../../static/css/zackrbrown.css"/>
     <meta charset="utf-8">
     <title>Zack Brown</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +26,17 @@
         </div>
         <br/>
         <textarea title="Post content" id="editor" name="postContent">${postContent}</textarea>
-        <div class="tag-container"></div>
+        <input title="Add tag" type="text" class="add-tag" name="addTag">
+        <#list tags>
+            <div class="tag-container">
+                <#items as tag>
+                    <div class="tag-wrapper">
+                        <a href="" class="tag">${tag}</a>
+                        <a href="" class="tag tag-remove">&#9447;</a>
+                    </div>
+                </#items>
+            </div>
+        </#list>
         <div class="post-action-container">
             <button type="submit" class="post-action">Post</button>
         </div>
