@@ -6,15 +6,14 @@ import com.zackrbrown.site.model.FormBlogPost;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -33,44 +32,54 @@ public class BlogController {
     }
 
     @GetMapping
-    public String blog(@RequestParam(defaultValue = "") String post, Model model) {
-        if (post.isEmpty()) {
-            Optional<Post> latestPost = postRepository.findAll(
+    public String latestBlog(Model model) {
+        Optional<Post> latestPost = postRepository.findAll(
+                PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
+                .get().findFirst();
+        if (latestPost.isPresent()) {
+            renderPost(model, latestPost.get());
+
+            Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
+                    latestPost.get().getCreatedDateTime(),
                     PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
                     .get().findFirst();
-            if (latestPost.isPresent()) {
-                renderPost(model, latestPost.get());
-                model.addAttribute("previousPost", "x");
-                model.addAttribute("nextPost", "y");
-            } else {
-                model.addAttribute("postTitle", "");
-                model.addAttribute("postDate", "");
-                model.addAttribute("postContent", "");
-                model.addAttribute("showPrevious", false);
-                model.addAttribute("showNext", false);
-            }
+            model.addAttribute("showPrevious", previousPost.isPresent());
+            model.addAttribute("showPrevious", previousPost.isPresent());
+            previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
+            model.addAttribute("showNext", false);
         } else {
-            Optional<Post> requestedPost = postRepository.findOne(
-                    Example.of(new Post(null, post, null, null, null)));
-            if (requestedPost.isPresent()) {
-                renderPost(model, requestedPost.get());
+            model.addAttribute("postTitle", "");
+            model.addAttribute("postDate", "");
+            model.addAttribute("postContent", "");
+            model.addAttribute("showPrevious", false);
+            model.addAttribute("showNext", false);
+        }
 
-                Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
-                        requestedPost.get().getCreatedDateTime(),
-                        PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
-                        .get().findFirst();
-                model.addAttribute("showPrevious", previousPost.isPresent());
-                previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
+        return "blog";
+    }
 
-                Optional<Post> nextPost = postRepository.findByCreatedDateTimeAfter(
-                        requestedPost.get().getCreatedDateTime(),
-                        PageRequest.of(0, 1, Sort.Direction.ASC, "createdDateTime"))
-                        .get().findFirst();
-                model.addAttribute("showNext", nextPost.isPresent());
-                nextPost.ifPresent(p -> model.addAttribute("nextPost", p.getUrlName()));
-            } else {
-                return "redirect:/blog";
-            }
+    @GetMapping("/{postUrlName}")
+    public String blog(@PathVariable String postUrlName, Model model) {
+        Optional<Post> requestedPost = postRepository.getByUrlName(postUrlName);
+
+        if (requestedPost.isPresent()) {
+            renderPost(model, requestedPost.get());
+
+            Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
+                    requestedPost.get().getCreatedDateTime(),
+                    PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
+                    .get().findFirst();
+            model.addAttribute("showPrevious", previousPost.isPresent());
+            previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
+
+            Optional<Post> nextPost = postRepository.findByCreatedDateTimeAfter(
+                    requestedPost.get().getCreatedDateTime(),
+                    PageRequest.of(0, 1, Sort.Direction.ASC, "createdDateTime"))
+                    .get().findFirst();
+            model.addAttribute("showNext", nextPost.isPresent());
+            nextPost.ifPresent(p -> model.addAttribute("nextPost", p.getUrlName()));
+        } else {
+            return "redirect:/blog";
         }
 
         return "blog";
@@ -87,19 +96,64 @@ public class BlogController {
         model.addAttribute("postContent", renderedContent);
     }
 
-    @GetMapping("/edit")
-    public String edit(Principal principal) {
+    @GetMapping("/{postUrlName}/edit")
+    public String editPost(@PathVariable String postUrlName, Principal principal, Model model) {
         // TODO pull from config
         if (!"zrbrown".equals(principal.getName())) {
             return "redirect:/blog";
         }
 
+        Optional<Post> post = postRepository.getByUrlName(postUrlName);
+
+        if (!post.isPresent()) {
+            return "redirect:/blog";
+        }
+
+        model.addAttribute("postTitle", post.get().getTitle());
+        model.addAttribute("postContent", post.get().getContent());
+        model.addAttribute("submitPath", "/blog/" + postUrlName + "/edit");
+
+        return "admin/blog_edit";
+    }
+
+    @PostMapping("/{postUrlName}/edit")
+    public String submitPostEdit(@PathVariable String postUrlName, FormBlogPost blogPost, Principal principal) {
+        // TODO pull from config
+        if (!"zrbrown".equals(principal.getName())) {
+            return "redirect:/blog/{postUrlName}";
+        }
+
+        Optional<Post> postOptional = postRepository.getByUrlName(postUrlName);
+
+        if (!postOptional.isPresent()) {
+            return "redirect:/blog/{postUrlName}";
+        }
+
+        Post post = postOptional.get();
+        post.setTitle(blogPost.getPostTitle());
+        post.setContent(blogPost.getPostContent());
+        postRepository.save(post);
+
+        return "redirect:/blog/{postUrlName}";
+    }
+
+    @GetMapping("/add")
+    public String addPost(Principal principal, Model model) {
+        // TODO pull from config
+        if (!"zrbrown".equals(principal.getName())) {
+            return "redirect:/blog";
+        }
+
+        model.addAttribute("postTitle", "");
+        model.addAttribute("postContent", "");
+        model.addAttribute("submitPath", "/blog/add");
+
         return "admin/blog_edit";
     }
 
     // TODO use RETHROW in production
-    @PostMapping("/edit")
-    public String postBlogEntry(FormBlogPost blogPost, Principal principal) {
+    @PostMapping("/add")
+    public String submitPost(FormBlogPost blogPost, Principal principal) {
         // TODO pull from config
         if (!"zrbrown".equals(principal.getName())) {
             return "redirect:/blog";

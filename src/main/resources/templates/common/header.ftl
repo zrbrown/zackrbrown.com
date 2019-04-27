@@ -1,6 +1,6 @@
 <div class="header">
     <ul class="headerLinkContainer">
-        <li><a href="" title="Blog">Blog</a></li>
+        <li><a href="/blog" title="Blog">Blog</a></li>
         <li><a href="" title="Projects">Projects</a></li>
         <li><a href="" title="About">About</a></li>
     </ul>

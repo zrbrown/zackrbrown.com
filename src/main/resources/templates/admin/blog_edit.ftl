@@ -17,14 +17,14 @@
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
-    <form action="/blog/edit" method="post">
+    <form action="${submitPath}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
         <div class="content-title-edit-container">
-            <input title="Post title" type="text" class="content-title-edit" name="postTitle"/>
+            <input title="Post title" type="text" class="content-title-edit" name="postTitle" value="${postTitle}"/>
         </div>
         <br/>
-        <textarea title="Post content" id="editor" name="postContent"></textarea>
+        <textarea title="Post content" id="editor" name="postContent">${postContent}</textarea>
         <div class="post-action-container">
             <button type="submit" class="post-action">Post</button>
         </div>

@@ -19,10 +19,10 @@
     <p class="post-content">${postContent}</p>
     <div class="navigation-buttons">
         <#if showPrevious>
-            <div class="previous-post"><a href="/blog?post=${previousPost}">&lt;&lt; Older</a></div>
+            <div class="previous-post"><a href="/blog/${previousPost}">&lt;&lt; Older</a></div>
         </#if>
         <#if showNext>
-            <div class="next-post"><a href="/blog?post=${nextPost}">Newer &gt;&gt;</a></div>
+            <div class="next-post"><a href="/blog/${nextPost}">Newer &gt;&gt;</a></div>
         </#if>
     </div>
 </div>
