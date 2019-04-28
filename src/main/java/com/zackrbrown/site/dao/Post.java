@@ -35,12 +35,13 @@ public class Post {
     public Post() {
     }
 
-    public Post(UUID id, String urlName, String title, String content, LocalDateTime createdDateTime) {
+    public Post(UUID id, String urlName, String title, String content, LocalDateTime createdDateTime, Set<Tag> tags) {
         this.id = id;
         this.urlName = urlName;
         this.title = title;
         this.content = content;
         this.createdDateTime = createdDateTime;
+        this.tags = tags;
     }
 
     public UUID getId() {

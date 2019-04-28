@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -176,6 +173,7 @@ public class BlogController {
         model.addAttribute("postTitle", "");
         model.addAttribute("postContent", "");
         model.addAttribute("submitPath", "/blog/add");
+        model.addAttribute("tags", Collections.emptyList());
 
         return "admin/blog_edit";
     }
@@ -188,12 +186,21 @@ public class BlogController {
             return "redirect:/blog";
         }
 
+        Set<Tag> tags = blogPost.getAddedTags().stream().map(tagName -> {
+            Tag tag = new Tag();
+            tag.setName(tagName);
+
+            Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
+            return existingTag.orElseGet(() -> tagRepository.save(tag));
+        }).collect(Collectors.toSet());
+
         Post post = new Post(
                 UUID.randomUUID(),
                 "test-post",
                 blogPost.getPostTitle(),
                 blogPost.getPostContent(),
-                LocalDateTime.now());
+                LocalDateTime.now(),
+                tags);
         postRepository.save(post);
 
         return "redirect:/blog";
