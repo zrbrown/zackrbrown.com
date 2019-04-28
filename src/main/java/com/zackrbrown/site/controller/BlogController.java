@@ -8,6 +8,7 @@ import com.zackrbrown.site.model.FormBlogPost;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -153,6 +154,13 @@ public class BlogController {
         Post post = postOptional.get();
         post.setTitle(blogPost.getPostTitle());
         post.setContent(blogPost.getPostContent());
+        post.getTags().addAll(blogPost.getAddedTags().stream().map(tagName -> {
+            Tag tag = new Tag();
+            tag.setName(tagName);
+
+            Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
+            return existingTag.orElseGet(() -> tagRepository.save(tag));
+        }).collect(Collectors.toSet()));
         postRepository.save(post);
 
         return "redirect:/blog/{postUrlName}";

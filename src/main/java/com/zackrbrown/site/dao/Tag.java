@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Tag {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     @Column

@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS post_updates
 CREATE TABLE IF NOT EXISTS tags
 (
     id   UUID PRIMARY KEY,
-    name VARCHAR(30)
+    name VARCHAR(30) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS posts_to_tags

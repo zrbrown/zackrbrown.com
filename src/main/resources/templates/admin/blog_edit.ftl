@@ -26,17 +26,17 @@
         </div>
         <br/>
         <textarea title="Post content" id="editor" name="postContent">${postContent}</textarea>
-        <input title="Add tag" type="text" class="add-tag" name="addTag">
-        <#list tags>
-            <div class="tag-container">
+        <input title="Tag name entry" type="text" class="add-tag-text" name="addTag" id="addTagInput"/>
+        <button title="Add tag" type="button" onclick="addTagToTags()">Add tag</button>
+        <div class="tag-container" id="tagContainer">
+            <#list tags>
                 <#items as tag>
                     <div class="tag-wrapper">
-                        <a href="" class="tag">${tag}</a>
-                        <a href="" class="tag tag-remove">&#9447;</a>
+                        <span class="tag">${tag}</span><a href="" class="tag tag-remove">&#9447;</a>
                     </div>
                 </#items>
-            </div>
-        </#list>
+            </#list>
+        </div>
         <div class="post-action-container">
             <button type="submit" class="post-action">Post</button>
         </div>
@@ -45,6 +45,35 @@
 
 <script>
     var simplemde = new SimpleMDE({element: document.getElementById("editor")});
+
+    var tagContainer = document.getElementById("tagContainer");
+
+    function addTagToTags() {
+        let tagName = document.getElementById("addTagInput").value;
+
+        let tagSpan = document.createElement("span");
+        tagSpan.setAttribute("class", "tag");
+        tagSpan.appendChild(document.createTextNode(tagName));
+
+        let tagRemoveLink = document.createElement("a");
+        tagRemoveLink.setAttribute("href", "");
+        tagRemoveLink.setAttribute("class", "tag tag-remove");
+        tagRemoveLink.appendChild(document.createTextNode("ⓧ"));
+
+        let tagWrapper = document.createElement("div");
+        tagWrapper.setAttribute("class", "tag-wrapper");
+        tagWrapper.appendChild(tagSpan);
+        tagWrapper.appendChild(tagRemoveLink);
+
+        tagContainer.appendChild(tagWrapper);
+
+        let tagSubmitInput = document.createElement("input");
+        tagSubmitInput.setAttribute("type", "hidden");
+        tagSubmitInput.setAttribute("name", "addedTags");
+        tagSubmitInput.setAttribute("value", tagName);
+
+        tagContainer.appendChild(tagSubmitInput);
+    }
 </script>
 
 </body>

@@ -14,6 +14,24 @@ a {
     color: #000088;
 }
 
+button {
+    font-family: Roboto, sans-serif;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: none;
+    padding: 5px 15px;
+    background-color: #000088;
+}
+
+button:hover,
+button:focus {
+    background-color: #7788BB;
+}
+
+button:active {
+    background-color: #000055;
+}
+
 div.header {
     background-color: #000088;
     position: fixed;
@@ -144,28 +162,14 @@ p.content {
     color: #35A5FF;
 }
 
-.add-tag {
+.tag-remove {
+    margin-left: 5px;
+}
+
+.add-tag-text {
     margin: 7px 2px;
 }
 
 .post-action-container {
     text-align: right;
-}
-
-button.post-action {
-    font-family: Roboto, sans-serif;
-    color: #FFFFFF;
-    border: none;
-    box-shadow: none;
-    padding: 5px 15px;
-    background-color: #000088;
-}
-
-button.post-action:hover,
-button.post-action:focus {
-    background-color: #7788BB;
-}
-
-button.post-action:active {
-    background-color: #000055;
 }
