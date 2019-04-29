@@ -45,7 +45,10 @@ public class BlogController {
                 PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
                 .get().findFirst();
         if (latestPost.isPresent()) {
-            Set<FormattedPostUpdate> formattedPostUpdates = latestPost.get().getPostUpdates().stream()
+            List<PostUpdate> postUpdates = postUpdateRepository.findAllByPost(latestPost.get(),
+                    Sort.by(Sort.Direction.DESC, "updatedDateTime"));
+
+            Set<FormattedPostUpdate> formattedPostUpdates = postUpdates.stream()
                     .map(postUpdate -> {
                         FormattedPostUpdate formattedPostUpdate = new FormattedPostUpdate();
 
@@ -71,7 +74,6 @@ public class BlogController {
                     PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
                     .get().findFirst();
             model.addAttribute("showPrevious", previousPost.isPresent());
-            model.addAttribute("showPrevious", previousPost.isPresent());
             previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
             model.addAttribute("showNext", false);
         } else {
@@ -90,7 +92,10 @@ public class BlogController {
         Optional<Post> requestedPost = postRepository.getByUrlName(postUrlName);
 
         if (requestedPost.isPresent()) {
-            Set<FormattedPostUpdate> formattedPostUpdates = requestedPost.get().getPostUpdates().stream()
+            List<PostUpdate> postUpdates = postUpdateRepository.findAllByPost(requestedPost.get(),
+                    Sort.by(Sort.Direction.DESC, "updatedDateTime"));
+
+            Set<FormattedPostUpdate> formattedPostUpdates = postUpdates.stream()
                     .map(postUpdate -> {
                         FormattedPostUpdate formattedPostUpdate = new FormattedPostUpdate();
 
@@ -186,13 +191,7 @@ public class BlogController {
         Post post = postOptional.get();
         post.setTitle(blogPost.getPostTitle());
         post.setContent(blogPost.getPostContent());
-        post.getTags().addAll(blogPost.getAddedTags().stream().map(tagName -> {
-            Tag tag = new Tag();
-            tag.setName(tagName);
-
-            Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
-            return existingTag.orElseGet(() -> tagRepository.save(tag));
-        }).collect(Collectors.toSet()));
+        post.getTags().addAll(blogPost.getAddedTags().stream().map(this::getOrAddTag).collect(Collectors.toSet()));
         postRepository.save(post);
 
         return "redirect:/blog/{postUrlName}";
@@ -272,13 +271,7 @@ public class BlogController {
             return "redirect:/blog";
         }
 
-        Set<Tag> tags = blogPost.getAddedTags().stream().map(tagName -> {
-            Tag tag = new Tag();
-            tag.setName(tagName);
-
-            Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
-            return existingTag.orElseGet(() -> tagRepository.save(tag));
-        }).collect(Collectors.toSet());
+        Set<Tag> tags = blogPost.getAddedTags().stream().map(this::getOrAddTag).collect(Collectors.toSet());
 
         Post post = new Post(
                 UUID.randomUUID(),
@@ -290,5 +283,13 @@ public class BlogController {
         postRepository.save(post);
 
         return "redirect:/blog";
+    }
+
+    private Tag getOrAddTag(String tagName) {
+        Tag tag = new Tag();
+        tag.setName(tagName);
+
+        Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
+        return existingTag.orElseGet(() -> tagRepository.save(tag));
     }
 }
