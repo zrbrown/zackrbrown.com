@@ -1,10 +1,9 @@
 package com.zackrbrown.site.controller;
 
-import com.zackrbrown.site.dao.Post;
-import com.zackrbrown.site.dao.PostRepository;
-import com.zackrbrown.site.dao.Tag;
-import com.zackrbrown.site.dao.TagRepository;
+import com.zackrbrown.site.dao.*;
 import com.zackrbrown.site.model.FormBlogPost;
+import com.zackrbrown.site.model.FormBlogPostUpdate;
+import com.zackrbrown.site.model.FormattedPostUpdate;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -29,10 +28,14 @@ import java.util.stream.Collectors;
 public class BlogController {
 
     private final PostRepository postRepository;
+    private final PostUpdateRepository postUpdateRepository;
     private final TagRepository tagRepository;
 
-    public BlogController(PostRepository postRepository, TagRepository tagRepository) {
+    public BlogController(PostRepository postRepository,
+                          PostUpdateRepository postUpdateRepository,
+                          TagRepository tagRepository) {
         this.postRepository = postRepository;
+        this.postUpdateRepository = postUpdateRepository;
         this.tagRepository = tagRepository;
     }
 
@@ -42,6 +45,22 @@ public class BlogController {
                 PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
                 .get().findFirst();
         if (latestPost.isPresent()) {
+            Set<FormattedPostUpdate> formattedPostUpdates = latestPost.get().getPostUpdates().stream()
+                    .map(postUpdate -> {
+                        FormattedPostUpdate formattedPostUpdate = new FormattedPostUpdate();
+
+                        Parser parser = Parser.builder().build();
+                        Node document = parser.parse(postUpdate.getContent());
+                        HtmlRenderer renderer = HtmlRenderer.builder().build();
+                        String renderedContent = renderer.render(document);
+                        formattedPostUpdate.setContent(renderedContent);
+
+                        formattedPostUpdate.setDate(postUpdate.getUpdatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+                        return formattedPostUpdate;
+                    }).collect(Collectors.toSet());
+            model.addAttribute("postUpdates", formattedPostUpdates);
+
             List<String> tags = tagRepository.getAllByPosts(Collections.singleton(latestPost.get())).stream()
                     .map(Tag::getName)
                     .collect(Collectors.toList());
@@ -71,6 +90,22 @@ public class BlogController {
         Optional<Post> requestedPost = postRepository.getByUrlName(postUrlName);
 
         if (requestedPost.isPresent()) {
+            Set<FormattedPostUpdate> formattedPostUpdates = requestedPost.get().getPostUpdates().stream()
+                    .map(postUpdate -> {
+                        FormattedPostUpdate formattedPostUpdate = new FormattedPostUpdate();
+
+                        Parser parser = Parser.builder().build();
+                        Node document = parser.parse(postUpdate.getContent());
+                        HtmlRenderer renderer = HtmlRenderer.builder().build();
+                        String renderedContent = renderer.render(document);
+                        formattedPostUpdate.setContent(renderedContent);
+
+                        formattedPostUpdate.setDate(postUpdate.getUpdatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+                        return formattedPostUpdate;
+                    }).collect(Collectors.toSet());
+            model.addAttribute("postUpdates", formattedPostUpdates);
+
             List<String> tags = tagRepository.getAllByPosts(Collections.singleton(requestedPost.get())).stream()
                     .map(Tag::getName)
                     .collect(Collectors.toList());
@@ -158,6 +193,57 @@ public class BlogController {
             Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
             return existingTag.orElseGet(() -> tagRepository.save(tag));
         }).collect(Collectors.toSet()));
+        postRepository.save(post);
+
+        return "redirect:/blog/{postUrlName}";
+    }
+
+    @GetMapping("/{postUrlName}/update")
+    public String updatePost(@PathVariable String postUrlName, Principal principal, Model model) {
+        // TODO pull from config
+        if (!"zrbrown".equals(principal.getName())) {
+            return "redirect:/blog";
+        }
+
+        Optional<Post> post = postRepository.getByUrlName(postUrlName);
+
+        if (!post.isPresent()) {
+            return "redirect:/blog";
+        }
+
+        List<String> tags = tagRepository.getAllByPosts(Collections.singleton(post.get())).stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
+
+        renderPost(model, post.get(), tags);
+
+        model.addAttribute("submitPath", "/blog/" + postUrlName + "/update");
+
+        return "admin/blog_update";
+    }
+
+    @PostMapping("/{postUrlName}/update")
+    public String submitPostUpdate(@PathVariable String postUrlName, FormBlogPostUpdate blogPostUpdate, Principal principal) {
+        // TODO pull from config
+        if (!"zrbrown".equals(principal.getName())) {
+            return "redirect:/blog/{postUrlName}";
+        }
+
+        Optional<Post> postOptional = postRepository.getByUrlName(postUrlName);
+
+        if (!postOptional.isPresent()) {
+            return "redirect:/blog/{postUrlName}";
+        }
+
+        Post post = postOptional.get();
+
+        PostUpdate postUpdate = new PostUpdate();
+        postUpdate.setPost(post);
+        postUpdate.setContent(blogPostUpdate.getPostContent());
+        postUpdate.setUpdatedDateTime(LocalDateTime.now());
+        postUpdateRepository.save(postUpdate);
+
+        post.getPostUpdates().add(postUpdate);
         postRepository.save(post);
 
         return "redirect:/blog/{postUrlName}";

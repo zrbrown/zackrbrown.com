@@ -32,6 +32,9 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private Set<Tag> tags;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "post")
+    private Set<PostUpdate> postUpdates;
+
     public Post() {
     }
 
@@ -90,5 +93,13 @@ public class Post {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Set<PostUpdate> getPostUpdates() {
+        return postUpdates;
+    }
+
+    public void setPostUpdates(Set<PostUpdate> postUpdates) {
+        this.postUpdates = postUpdates;
     }
 }

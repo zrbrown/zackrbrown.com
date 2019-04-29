@@ -95,7 +95,7 @@ div.content-container {
     background-color: #FFFFFF;
     position: relative;
     top: 5em;
-    margin: 1em auto;
+    margin: 1em auto 8em auto;
     width: 70%;
     box-shadow: 2px 2px 5px 1px #000000;
     padding: 1em 2em 1em 2em;
@@ -111,6 +111,7 @@ div.post-title {
 
 span.post-date {
     font-style: italic;
+    float: right;
 }
 
 div.navigation-buttons {
@@ -139,6 +140,19 @@ p.content {
     font-family: Roboto, sans-serif;
     font-size: 1.1em;
     line-height: 1.5;
+}
+
+.post-update-container {
+    border-color: #92d9ff;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    padding: 10px 10px 7px 10px;
+    margin: 0 0 25px 0;
+}
+
+.post-update-date {
+    font-style: italic;
 }
 
 .tag-container {

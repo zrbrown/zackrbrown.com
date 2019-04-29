@@ -8,6 +8,9 @@
 
     <link rel="stylesheet" href="/css/zackrbrown.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </head>
 
 <body>
@@ -15,16 +18,19 @@
 
 <div class="content-container">
     <div class="post-title">${postTitle}</div>
-    <#list postUpdates>
-        <#items as postUpdate>
-            <div class="post-update-container">
-                <span class="post-update-date">Updated ${postUpdate.date}</span>
-                <div>${postUpdate.content}</div>
-            </div>
-        </#items>
-    </#list>
     <span class="post-date">${postDate}</span>
-    <div>${postContent}</div>
+    <br>
+    <br>
+    <form action="${submitPath}" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+        <textarea title="Post content" id="editor" name="postContent"></textarea>
+        <br>
+        <div class="post-action-container">
+            <button type="submit" class="post-action">Update</button>
+        </div>
+    </form>
+    <p class="post-content">${postContent}</p>
     <#list tags>
         <div class="tag-container">
             <#items as tag>
@@ -33,15 +39,11 @@
             </#items>
         </div>
     </#list>
-    <div class="navigation-buttons">
-        <#if showPrevious>
-            <div class="previous-post"><a href="/blog/${previousPost}">&larr; Older</a></div>
-        </#if>
-        <#if showNext>
-            <div class="next-post"><a href="/blog/${nextPost}">Newer &rarr;</a></div>
-        </#if>
-    </div>
 </div>
+
+<script>
+    var simplemde = new SimpleMDE({element: document.getElementById("editor")});
+</script>
 
 </body>
 </html>
