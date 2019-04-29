@@ -5,9 +5,9 @@ SET SEARCH_PATH TO application;
 CREATE TABLE IF NOT EXISTS posts
 (
     id                UUID PRIMARY KEY,
-    url_name          VARCHAR(105) UNIQUE NOT NULL,
-    title             VARCHAR(100) NOT NULL,
-    content           VARCHAR(5000) NOT NULL,
+    url_name          TEXT UNIQUE NOT NULL,
+    title             TEXT NOT NULL,
+    content           TEXT NOT NULL,
     created_date_time TIMESTAMP NOT NULL
 );
 
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS post_updates
 (
     id                UUID PRIMARY KEY,
     post_id           UUID NOT NULL,
-    content           VARCHAR(5000) NOT NULL,
+    content           TEXT NOT NULL,
     updated_date_time TIMESTAMP NOT NULL,
     FOREIGN KEY (post_id) REFERENCES posts (id)
 );
@@ -29,7 +29,7 @@ CREATE INDEX IF NOT EXISTS post_updates_post_id_index
 CREATE TABLE IF NOT EXISTS tags
 (
     id   UUID PRIMARY KEY,
-    name VARCHAR(30) UNIQUE NOT NULL
+    name TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts_to_tags
