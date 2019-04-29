@@ -1,5 +1,6 @@
 package com.zackrbrown.site.model;
 
+import java.util.Collections;
 import java.util.List;
 
 public class FormBlogPost {
@@ -25,7 +26,7 @@ public class FormBlogPost {
     }
 
     public List<String> getAddedTags() {
-        return addedTags;
+        return addedTags == null ? Collections.emptyList() : addedTags;
     }
 
     public void setAddedTags(List<String> addedTags) {

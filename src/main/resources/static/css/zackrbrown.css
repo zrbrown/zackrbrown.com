@@ -1,11 +1,8 @@
 @IMPORT url("//fonts.googleapis.com/css?family=Roboto");
 
 html {
-    /*background: url("//upload.wikimedia.org/wikipedia/commons/d/d5/Kansas_City_MO_Skyline_14July2008.jpg");*/
-    background: url("//fortunedotcom.files.wordpress.com/2017/10/gettyimages-483792143.jpg");
-    background-color: #CCCCCC;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-image: linear-gradient(to bottom, #89B8FF 0%, #EEEEEE 100%);
+    background-attachment: fixed;
 }
 
 a {
@@ -32,7 +29,7 @@ button:active {
     background-color: #000055;
 }
 
-div.header {
+.header {
     background-color: #000088;
     position: fixed;
     top: 0;
@@ -42,31 +39,31 @@ div.header {
     box-shadow: 0 0 8px 0 #000000;
 }
 
-ul.headerLinkContainer {
+.headerLinkContainer {
     margin: 0;
     padding: 0 0 0 10px;
     position: absolute;
     bottom: 0;
 }
 
-ul.headerLinkContainer > li {
+.headerLinkContainer > li {
     display: inline-block;
     padding-left: 7px;
 }
 
-ul.headerLinkContainer > li > a {
+.headerLinkContainer > li > a {
     font-family: Roboto, sans-serif;
     font-size: 2em;
     text-decoration: none;
     color: #556699;
 }
 
-ul.headerLinkContainer > li > a:hover {
+.headerLinkContainer > li > a:hover {
     color: #7788BB;
     font-weight: bold;
 }
 
-ul.headerLinkContainer > li > a::after {
+.headerLinkContainer > li > a::after {
     display: block;
     content: attr(title);
     font-weight: bold;
@@ -75,23 +72,23 @@ ul.headerLinkContainer > li > a::after {
     visibility: hidden;
 }
 
-div.headerIconContainer {
+.headerIconContainer {
     position: absolute;
     bottom: 0;
     right: 0;
     padding: 4px
 }
 
-a.headerIcon {
+.headerIcon {
     color: #556699;
     padding-right: 6px;
 }
 
-a.headerIcon:hover {
+.headerIcon:hover {
     color: #7788BB;
 }
 
-div.content-container {
+.content-container {
     background-color: #FFFFFF;
     position: relative;
     top: 5em;
@@ -102,28 +99,28 @@ div.content-container {
     max-width: 46em;
 }
 
-div.post-title {
+.post-title {
     font-family: Roboto, sans-serif;
     font-size: 3.5em;
     color: #445588;
     padding: 0 0 10px 0;
 }
 
-span.post-date {
+.post-date {
     font-style: italic;
     float: right;
 }
 
-div.navigation-buttons {
+.navigation-buttons {
     display: inline-block;
     width: 100%;
 }
 
-div.previous-post {
+.previous-post {
     float: left;
 }
 
-div.next-post {
+.next-post {
     float: right;
 }
 
@@ -131,12 +128,12 @@ div.next-post {
     text-align: center;
 }
 
-input.content-title-edit {
+.content-title-edit {
     font-size: 2.5em;
     text-align: center;
 }
 
-p.content {
+.content {
     font-family: Roboto, sans-serif;
     font-size: 1.1em;
     line-height: 1.5;

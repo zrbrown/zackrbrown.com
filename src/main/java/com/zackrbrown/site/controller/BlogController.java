@@ -82,6 +82,8 @@ public class BlogController {
             model.addAttribute("postContent", "");
             model.addAttribute("showPrevious", false);
             model.addAttribute("showNext", false);
+            model.addAttribute("tags", Collections.emptyList());
+            model.addAttribute("postUpdates", Collections.emptyList());
         }
 
         return "blog";
@@ -275,7 +277,7 @@ public class BlogController {
 
         Post post = new Post(
                 UUID.randomUUID(),
-                "test-post",
+                blogPost.getPostTitle().replaceAll("\\s", "-"),
                 blogPost.getPostTitle(),
                 blogPost.getPostContent(),
                 LocalDateTime.now(),
