@@ -25,3 +25,6 @@ hs_err_pid*
 /META-INF/
 /target/
 /zackrbrown-com.iml
+
+# Sensitive files
+*.p12
