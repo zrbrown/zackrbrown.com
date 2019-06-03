@@ -29,41 +29,51 @@ button:active {
     background-color: #000055;
 }
 
+#header-logo-container {
+    display: inline-block;
+    float: left
+}
+
+#header-logo {
+    width: 40%;
+    padding: 3px 0 0 3px;
+    display: block;
+}
+
 .header {
     background-color: #000088;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 4em;
     box-shadow: 0 0 8px 0 #000000;
 }
 
 .headerLinkContainer {
+    clear: both;
+}
+
+.headerNavContainer {
     margin: 0;
-    padding: 0 0 0 10px;
-    position: absolute;
-    bottom: 0;
+    padding: 0 0 0 20px;
+    float: left;
 }
 
-.headerLinkContainer > li {
-    display: inline-block;
-    padding-left: 7px;
-}
-
-.headerLinkContainer > li > a {
+.headerNavContainer > a {
     font-family: Roboto, sans-serif;
-    font-size: 2em;
+    font-size: 1.4em;
     text-decoration: none;
     color: #556699;
+    display: inline-block;
+    vertical-align: bottom;
 }
 
-.headerLinkContainer > li > a:hover {
+.headerNavContainer > a:hover {
     color: #7788BB;
     font-weight: bold;
 }
 
-.headerLinkContainer > li > a::after {
+.headerNavContainer > a::after {
     display: block;
     content: attr(title);
     font-weight: bold;
@@ -73,10 +83,8 @@ button:active {
 }
 
 .headerIconContainer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 4px
+    margin: 0;
+    float: right;
 }
 
 .headerIcon {

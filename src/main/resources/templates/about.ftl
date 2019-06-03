@@ -14,10 +14,16 @@
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
-    <div class="post-title">Zack Brown</div>
-    <div>
-        I'm Zack Brown, a software engineer from Kansas City.
-    </div>
+    <div class="post-title">About</div>
+    <p>
+        I'm Zack Brown. I live in Kansas City, MO and have lived in the region since 2011. I've been a professional software engineer since that time as well, after graduating from Iowa State University with a BS in Computer Science.
+    </p>
+    <p>
+        This site is written using Spring Boot and Freemarker with a PostgreSQL database. Both are hosted at DigitalOcean, with the Tomcat server running on Ubuntu in a Docker container.
+    </p>
+    <p>
+        Link to resume
+    </p>
 </div>
 
 </body>
