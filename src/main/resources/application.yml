@@ -1,33 +1,33 @@
 server:
-  port: 443
-  ssl:
-    enabled: true
-    key-store: /etc/keystore.p12
-    key-store-password: 
-    keyStoreType: PKCS12
-    keyAlias: tomcat
+  port: 8080
+#  ssl:
+#    enabled: true
+#    key-store: /etc/keystore.p12
+#    key-store-password:
+#    keyStoreType: PKCS12
+#    keyAlias: tomcat
 
 spring:
   freemarker.template-loader-path: classpath:/templates
   freemarker.suffix: .ftl
   datasource:
     platform: postgres
-    url: jdbc:postgresql://<url>
-    username: <user>
-    password: <pw>
+    url: jdbc:postgresql://172.17.0.2:5432/zackrbrown_com
+    username: postgres
+    password: postgres
   jpa.properties.hibernate:
     dialect: org.hibernate.dialect.PostgreSQLDialect
     default_schema: application
     jdbc.lob.non_contextual_creation: true
 
 security:
-  require-ssl: true
-  oauth2:
-    client:
-      clientId: Iv1.a4cf7da0a75e9d81
-      clientSecret: <secret>
-      accessTokenUri: https://github.com/login/oauth/access_token
-      userAuthorizationUri: https://github.com/login/oauth/authorize
-      clientAuthenticationScheme: form
-    resource:
-      userInfoUri: https://api.github.com/user
+#  require-ssl: true
+#  oauth2:
+#    client:
+#      clientId: bd1c0a783ccdd1c9b9e4
+#      clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
+#      accessTokenUri: https://github.com/login/oauth/access_token
+#      userAuthorizationUri: https://github.com/login/oauth/authorize
+#      clientAuthenticationScheme: form
+#    resource:
+#      userInfoUri: https://api.github.com/user
