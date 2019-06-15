@@ -36,6 +36,7 @@ button:active {
 
 #header-logo {
     width: 40%;
+    min-height: 37px;
     padding: 3px 0 0 3px;
     display: block;
 }
