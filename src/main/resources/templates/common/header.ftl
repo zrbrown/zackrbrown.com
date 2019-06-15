@@ -1,6 +1,6 @@
 <div class="header">
     <div id="header-logo-container">
-        <a href="/blog"><img id="header-logo" src="/images/zackrbrowncom-logo.png" alt="Header logo"/></a>
+        <a href="/blog"><img id="header-logo" src="/images/zackrbrowncom-logo-web.png" alt="Header logo"/></a>
     </div>
     <div class="headerLinkContainer">
         <div class="headerNavContainer">
