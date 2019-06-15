@@ -14,15 +14,12 @@
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
-    <div class="post-title">About</div>
+    <div class="post-title">Projects</div>
     <p>
-        I'm Zack Brown. I live in Kansas City, MO and have lived in the region since 2011. I've been a professional software engineer since that time as well, after graduating from Iowa State University with a BS in Computer Science.
+        <a href="https://eightlives.net">Eight Lives Software</a> is my pseudonym for my open source projects.
     </p>
     <p>
-        This site is written using Spring Boot and Freemarker with a PostgreSQL database. Both are hosted at DigitalOcean, with the Tomcat server running on Ubuntu in a Docker container.
-    </p>
-    <p>
-        Link to resume
+        <a href="https://github.com/zrbrown/zackrbrown.com">The source</a> for zackrbrown.com.
     </p>
 </div>
 

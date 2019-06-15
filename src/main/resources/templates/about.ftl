@@ -22,7 +22,7 @@
         This site is written using Spring Boot and Freemarker with a PostgreSQL database. Both are hosted at DigitalOcean, with the Tomcat server running on Ubuntu in a Docker container.
     </p>
     <p>
-        Link to resume
+        <a href="/docs/zackrbrown_resume_june_2019.pdf">Resume</a>
     </p>
 </div>
 
