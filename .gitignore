@@ -28,3 +28,4 @@ hs_err_pid*
 
 # Sensitive files
 *.p12
+production.yml
