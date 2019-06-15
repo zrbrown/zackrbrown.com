@@ -31,12 +31,11 @@ button:active {
 
 #header-logo-container {
     display: inline-block;
-    float: left
+    float: left;
+    min-height: 39px;
 }
 
 #header-logo {
-    width: 40%;
-    min-height: 37px;
     padding: 3px 0 0 3px;
     display: block;
 }
