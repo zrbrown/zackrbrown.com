@@ -2,6 +2,9 @@
 
 html {
     background-image: linear-gradient(to bottom, #89B8FF 0%, #EEEEEE 100%);
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
     background-attachment: fixed;
 }
 
