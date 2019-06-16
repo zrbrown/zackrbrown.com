@@ -1,9 +1,7 @@
 @IMPORT url("//fonts.googleapis.com/css?family=Roboto");
 
-html {
-    background-image: linear-gradient(to bottom, #89B8FF 0%, #EEEEEE 100%);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+body {
+    background: linear-gradient(to bottom, #89B8FF 0%, #EEEEEE 100%) no-repeat fixed;
 }
 
 a {
