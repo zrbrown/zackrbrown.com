@@ -32,7 +32,7 @@ public abstract class StaticContentController {
                 model.addAttribute("content", renderedContent);
             }
         } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+            //TODO handle
         }
 
         model.addAttribute("title", getTitle());
