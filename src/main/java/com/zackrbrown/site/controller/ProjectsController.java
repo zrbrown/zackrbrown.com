@@ -1,16 +1,19 @@
 package com.zackrbrown.site.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/projects")
-public class ProjectsController {
+public class ProjectsController extends StaticContentController {
 
-    @GetMapping
-    public String about(Model model) {
+    @Override
+    public String getTitle() {
+        return "Projects";
+    }
+
+    @Override
+    public String getMarkdown() {
         return "projects";
     }
 }

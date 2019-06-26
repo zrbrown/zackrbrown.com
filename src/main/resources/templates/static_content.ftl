@@ -14,13 +14,8 @@
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
-    <div class="post-title">Projects</div>
-    <p>
-        <a href="https://eightlives.net">Eight Lives Software</a> is my pseudonym for my open source projects.
-    </p>
-    <p>
-        <a href="https://github.com/zrbrown/zackrbrown.com">The source</a> for zackrbrown.com.
-    </p>
+    <div class="post-title">${title}</div>
+    ${content}
 </div>
 
 </body>
