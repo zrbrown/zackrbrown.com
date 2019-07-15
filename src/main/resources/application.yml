@@ -8,8 +8,9 @@ server:
     keyAlias: tomcat
 
 spring:
-  freemarker.template-loader-path: classpath:/templates
-  freemarker.suffix: .ftl
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftl
   datasource:
     platform: postgres
     url: jdbc:postgresql://172.17.0.2:5432/zackrbrown_com
@@ -19,6 +20,8 @@ spring:
     dialect: org.hibernate.dialect.PostgreSQLDialect
     default_schema: application
     jdbc.lob.non_contextual_creation: true
+  servlet.multipart:
+    max-file-size: 10MB
 
 security:
   oauth2:
@@ -29,6 +32,11 @@ security:
       clientAuthenticationScheme: form
     resource:
       userInfoUri: https://api.github.com/user
+
+objectStorage:
+  imageBucket:
+    name: images
+    region: nyc3
 
 # In production, copy below into production.yml in the root directory and enter secrets
 #  spring:
@@ -41,3 +49,9 @@ security:
 #    oauth2:
 #      client:
 #        clientSecret: x
+#
+#  objectStorage:
+#    imageBucket:
+#      url: x
+#      accessKeyId: x
+#      secretAccessKey: x

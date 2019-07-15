@@ -11,9 +11,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
-<body>
+<body>c
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
@@ -25,6 +26,10 @@
         </div>
         <br/>
         <textarea title="Post content" id="editor" name="postContent">${postContent}</textarea>
+        <input id="addImageFileInput" class="file-input" title="Add Images" type="file" name="files[]" onchange="handleFileSelect(this)" multiple/>
+        <label for="addImageFileInput">Add Images</label>
+        <ul id="uploadedImagesList" title="Uploaded Images">
+        </ul>
         <input title="Tag name entry" type="text" class="add-tag-text" name="addTag" id="addTagInput"/>
         <button title="Add tag" type="button" onclick="addTagToTags()">Add tag</button>
         <div class="tag-container" id="tagContainer">
@@ -43,37 +48,11 @@
 </div>
 
 <script>
-    var simplemde = new SimpleMDE({element: document.getElementById("editor")});
+    let simplemde = new SimpleMDE({element: document.getElementById("editor")});
 
-    var tagContainer = document.getElementById("tagContainer");
-
-    function addTagToTags() {
-        let tagName = document.getElementById("addTagInput").value;
-
-        let tagSpan = document.createElement("span");
-        tagSpan.setAttribute("class", "tag");
-        tagSpan.appendChild(document.createTextNode(tagName));
-
-        let tagRemoveLink = document.createElement("a");
-        tagRemoveLink.setAttribute("href", "");
-        tagRemoveLink.setAttribute("class", "tag tag-remove");
-        tagRemoveLink.appendChild(document.createTextNode("ⓧ"));
-
-        let tagWrapper = document.createElement("div");
-        tagWrapper.setAttribute("class", "tag-wrapper");
-        tagWrapper.appendChild(tagSpan);
-        tagWrapper.appendChild(tagRemoveLink);
-
-        tagContainer.appendChild(tagWrapper);
-
-        let tagSubmitInput = document.createElement("input");
-        tagSubmitInput.setAttribute("type", "hidden");
-        tagSubmitInput.setAttribute("name", "addedTags");
-        tagSubmitInput.setAttribute("value", tagName);
-
-        tagContainer.appendChild(tagSubmitInput);
-    }
+    const ajaxBaseUrl = "http://localhost:443/";
 </script>
+<script src="/js/blog_edit.js"></script>
 
 </body>
 </html>

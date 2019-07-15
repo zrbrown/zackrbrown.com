@@ -144,12 +144,6 @@ button:active {
     text-align: center;
 }
 
-.content {
-    font-family: Roboto, sans-serif;
-    font-size: 1.1em;
-    line-height: 1.5;
-}
-
 .post-update-container {
     border-color: #92d9ff;
     border-style: solid;
@@ -194,4 +188,44 @@ button:active {
 
 .post-action-container {
     text-align: right;
+}
+
+.file-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.file-input + label {
+    font-family: Roboto, sans-serif;
+    color: #000088;
+}
+
+.file-input + label:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.file-input:focus + label {
+    text-decoration: underline;
+}
+
+.file-action-icon {
+    padding-left: .3em;
+    cursor: pointer;
+}
+
+.file-action-icon:hover {
+    color: #FF0000;
+}
+
+.file-link-list-item:hover {
+    text-decoration: underline;
+}
+
+.failed-file-link {
+    color: #FF0000;
 }
