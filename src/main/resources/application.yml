@@ -36,7 +36,11 @@ security:
 objectStorage:
   imageBucket:
     name: images
+    url: https://zackrbrown.nyc3.digitaloceanspaces.com
     region: nyc3
+
+site:
+  url: http://localhost:443
 
 # In production, copy below into production.yml in the root directory and enter secrets
 #  spring:
@@ -52,6 +56,5 @@ objectStorage:
 #
 #  objectStorage:
 #    imageBucket:
-#      url: x
 #      accessKeyId: x
 #      secretAccessKey: x

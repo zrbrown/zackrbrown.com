@@ -1,5 +1,6 @@
 package com.zackrbrown.site.controller;
 
+import com.zackrbrown.site.config.BaseConfig;
 import com.zackrbrown.site.dao.*;
 import com.zackrbrown.site.model.FormBlogPost;
 import com.zackrbrown.site.model.FormBlogPostUpdate;
@@ -7,6 +8,7 @@ import com.zackrbrown.site.model.FormattedPostUpdate;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,13 +32,17 @@ public class BlogController {
     private final PostRepository postRepository;
     private final PostUpdateRepository postUpdateRepository;
     private final TagRepository tagRepository;
+    private final BaseConfig config;
 
+    @Autowired
     public BlogController(PostRepository postRepository,
                           PostUpdateRepository postUpdateRepository,
-                          TagRepository tagRepository) {
+                          TagRepository tagRepository,
+                          BaseConfig config) {
         this.postRepository = postRepository;
         this.postUpdateRepository = postUpdateRepository;
         this.tagRepository = tagRepository;
+        this.config = config;
     }
 
     @GetMapping
@@ -261,6 +267,7 @@ public class BlogController {
         model.addAttribute("postContent", "");
         model.addAttribute("submitPath", "/blog/add");
         model.addAttribute("tags", Collections.emptyList());
+        model.addAttribute("ajaxBaseUrl", config.getUrl());
 
         return "admin/blog_edit";
     }

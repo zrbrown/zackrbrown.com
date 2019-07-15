@@ -50,7 +50,7 @@
 <script>
     let simplemde = new SimpleMDE({element: document.getElementById("editor")});
 
-    const ajaxBaseUrl = "http://localhost:443/";
+    const ajaxBaseUrl = "${ajaxBaseUrl}";
 </script>
 <script src="/js/blog_edit.js"></script>
 
