@@ -14,30 +14,34 @@
 <#include "/common/header.ftl"/>
 
 <div class="content-container">
-    <div class="post-title">${postTitle}</div>
-    <#list postUpdates>
-        <#items as postUpdate>
-            <div class="post-update-container">
-                <span class="post-update-date">Updated ${postUpdate.date}</span>
-                <div>${postUpdate.content}</div>
-            </div>
-        </#items>
-    </#list>
-    <span class="post-date">${postDate}</span>
-    <div>${postContent}</div>
-    <#list tags>
-        <div class="tag-container">
-            <#items as tag>
-                <div class="tag-wrapper"><a href="" class="tag">${tag}</a>
+    <div class="post-title">${postTitle!}</div>
+    <#if postUpdates??>
+        <#list postUpdates>
+            <#items as postUpdate>
+                <div class="post-update-container">
+                    <span class="post-update-date">Updated ${postUpdate.date}</span>
+                    <div>${postUpdate.content}</div>
                 </div>
             </#items>
-        </div>
-    </#list>
+        </#list>
+    </#if>
+    <span class="post-date">${postDate!}</span>
+    <div>${postContent!}</div>
+    <#if tags??>
+        <#list tags>
+            <div class="tag-container">
+                <#items as tag>
+                    <div class="tag-wrapper"><a href="" class="tag">${tag}</a>
+                    </div>
+                </#items>
+            </div>
+        </#list>
+    </#if>
     <div class="navigation-buttons">
-        <#if showPrevious>
+        <#if showPrevious?? && showPrevious>
             <div class="previous-post"><a href="/blog/${previousPost}">&larr; Older</a></div>
         </#if>
-        <#if showNext>
+        <#if showNext?? && showNext>
             <div class="next-post"><a href="/blog/${nextPost}">Newer &rarr;</a></div>
         </#if>
     </div>

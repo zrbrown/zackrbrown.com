@@ -58,14 +58,6 @@ public class BlogController {
             model.addAttribute("showPrevious", previousPost.isPresent());
             previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
             model.addAttribute("showNext", false);
-        } else {
-            model.addAttribute("postTitle", "");
-            model.addAttribute("postDate", "");
-            model.addAttribute("postContent", "");
-            model.addAttribute("showPrevious", false);
-            model.addAttribute("showNext", false);
-            model.addAttribute("tags", Collections.emptyList());
-            model.addAttribute("postUpdates", Collections.emptyList());
         }
 
         return "blog";
