@@ -68,11 +68,6 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void addPostUpdate(Post post, PostUpdate postUpdate) {
-        post.getPostUpdates().add(postUpdate);
-        postRepository.save(post);
-    }
-
     private Tag getOrAddTag(String tagName) {
         Tag tag = new Tag();
         tag.setName(tagName);

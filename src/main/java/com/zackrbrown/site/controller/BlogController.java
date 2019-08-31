@@ -195,8 +195,6 @@ public class BlogController {
             return "redirect:/blog";
         }
 
-        model.addAttribute("postTitle", "");
-        model.addAttribute("postContent", "");
         model.addAttribute("submitPath", "/blog/add");
         model.addAttribute("tags", Collections.emptyList());
         model.addAttribute("ajaxBaseUrl", config.getUrl());

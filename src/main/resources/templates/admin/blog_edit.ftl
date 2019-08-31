@@ -22,10 +22,10 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
         <div class="content-title-edit-container">
-            <input title="Post title" type="text" class="content-title-edit" name="postTitle" value="${postTitle}"/>
+            <input title="Post title" type="text" class="content-title-edit" name="postTitle" value="${postTitle!}"/>
         </div>
         <br/>
-        <textarea title="Post content" id="editor" name="postContent">${postContent}</textarea>
+        <textarea title="Post content" id="editor" name="postContent">${postContent!}</textarea>
         <input id="addImageFileInput" class="file-input" title="Add Images" type="file" name="files[]" onchange="handleFileSelect(this)" multiple/>
         <label for="addImageFileInput">Add Images</label>
         <ul id="uploadedImagesList" title="Uploaded Images">
