@@ -1,17 +1,16 @@
 package com.zackrbrown.site.controller;
 
 import com.zackrbrown.site.config.BaseConfig;
-import com.zackrbrown.site.dao.*;
+import com.zackrbrown.site.dao.Post;
+import com.zackrbrown.site.dao.Tag;
 import com.zackrbrown.site.model.FormBlogPost;
 import com.zackrbrown.site.model.FormBlogPostUpdate;
-import com.zackrbrown.site.model.FormattedPostUpdate;
+import com.zackrbrown.site.service.PostService;
+import com.zackrbrown.site.service.PostUpdateService;
+import com.zackrbrown.site.service.TagService;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,63 +21,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/blog")
 public class BlogController {
 
-    private final PostRepository postRepository;
-    private final PostUpdateRepository postUpdateRepository;
-    private final TagRepository tagRepository;
     private final BaseConfig config;
+    private final PostService postService;
+    private final PostUpdateService postUpdateService;
+    private final TagService tagService;
 
-    @Autowired
-    public BlogController(PostRepository postRepository,
-                          PostUpdateRepository postUpdateRepository,
-                          TagRepository tagRepository,
-                          BaseConfig config) {
-        this.postRepository = postRepository;
-        this.postUpdateRepository = postUpdateRepository;
-        this.tagRepository = tagRepository;
+    public BlogController(BaseConfig config, PostService postService, PostUpdateService postUpdateService, TagService tagService) {
         this.config = config;
+        this.postService = postService;
+        this.postUpdateService = postUpdateService;
+        this.tagService = tagService;
     }
 
     @GetMapping
     public String latestBlog(Model model) {
-        Optional<Post> latestPost = postRepository.findAll(
-                PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
-                .get().findFirst();
+        Optional<Post> latestPost = postService.getLatestPost();
         if (latestPost.isPresent()) {
-            List<PostUpdate> postUpdates = postUpdateRepository.findAllByPost(latestPost.get(),
-                    Sort.by(Sort.Direction.DESC, "updatedDateTime"));
+            model.addAttribute("postUpdates", postUpdateService.getFormattedPostUpdates(latestPost.get()));
 
-            Set<FormattedPostUpdate> formattedPostUpdates = postUpdates.stream()
-                    .map(postUpdate -> {
-                        FormattedPostUpdate formattedPostUpdate = new FormattedPostUpdate();
-
-                        Parser parser = Parser.builder().build();
-                        Node document = parser.parse(postUpdate.getContent());
-                        HtmlRenderer renderer = HtmlRenderer.builder().build();
-                        String renderedContent = renderer.render(document);
-                        formattedPostUpdate.setContent(renderedContent);
-
-                        formattedPostUpdate.setDate(postUpdate.getUpdatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
-
-                        return formattedPostUpdate;
-                    }).collect(Collectors.toSet());
-            model.addAttribute("postUpdates", formattedPostUpdates);
-
-            List<String> tags = tagRepository.getAllByPosts(Collections.singleton(latestPost.get())).stream()
+            List<String> tags = tagService.getTags(latestPost.get()).stream()
                     .map(Tag::getName)
                     .collect(Collectors.toList());
             renderPost(model, latestPost.get(), tags);
 
-            Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
-                    latestPost.get().getCreatedDateTime(),
-                    PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
-                    .get().findFirst();
+            Optional<Post> previousPost = postService.getPreviousPost(latestPost.get());
             model.addAttribute("showPrevious", previousPost.isPresent());
             previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
             model.addAttribute("showNext", false);
@@ -97,45 +73,21 @@ public class BlogController {
 
     @GetMapping("/{postUrlName}")
     public String blog(@PathVariable String postUrlName, Model model) {
-        Optional<Post> requestedPost = postRepository.getByUrlName(postUrlName);
+        Optional<Post> requestedPost = postService.getPostByUrlName(postUrlName);
 
         if (requestedPost.isPresent()) {
-            List<PostUpdate> postUpdates = postUpdateRepository.findAllByPost(requestedPost.get(),
-                    Sort.by(Sort.Direction.DESC, "updatedDateTime"));
+            model.addAttribute("postUpdates", postUpdateService.getFormattedPostUpdates(requestedPost.get()));
 
-            Set<FormattedPostUpdate> formattedPostUpdates = postUpdates.stream()
-                    .map(postUpdate -> {
-                        FormattedPostUpdate formattedPostUpdate = new FormattedPostUpdate();
-
-                        Parser parser = Parser.builder().build();
-                        Node document = parser.parse(postUpdate.getContent());
-                        HtmlRenderer renderer = HtmlRenderer.builder().build();
-                        String renderedContent = renderer.render(document);
-                        formattedPostUpdate.setContent(renderedContent);
-
-                        formattedPostUpdate.setDate(postUpdate.getUpdatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
-
-                        return formattedPostUpdate;
-                    }).collect(Collectors.toSet());
-            model.addAttribute("postUpdates", formattedPostUpdates);
-
-            List<String> tags = tagRepository.getAllByPosts(Collections.singleton(requestedPost.get())).stream()
+            List<String> tags = tagService.getTags(requestedPost.get()).stream()
                     .map(Tag::getName)
                     .collect(Collectors.toList());
-
             renderPost(model, requestedPost.get(), tags);
 
-            Optional<Post> previousPost = postRepository.findByCreatedDateTimeBefore(
-                    requestedPost.get().getCreatedDateTime(),
-                    PageRequest.of(0, 1, Sort.Direction.DESC, "createdDateTime"))
-                    .get().findFirst();
+            Optional<Post> previousPost = postService.getPreviousPost(requestedPost.get());
             model.addAttribute("showPrevious", previousPost.isPresent());
             previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
 
-            Optional<Post> nextPost = postRepository.findByCreatedDateTimeAfter(
-                    requestedPost.get().getCreatedDateTime(),
-                    PageRequest.of(0, 1, Sort.Direction.ASC, "createdDateTime"))
-                    .get().findFirst();
+            Optional<Post> nextPost = postService.getNextPost(requestedPost.get());
             model.addAttribute("showNext", nextPost.isPresent());
             nextPost.ifPresent(p -> model.addAttribute("nextPost", p.getUrlName()));
         } else {
@@ -165,7 +117,7 @@ public class BlogController {
             return "redirect:/blog";
         }
 
-        Optional<Post> post = postRepository.getByUrlName(postUrlName);
+        Optional<Post> post = postService.getPostByUrlName(postUrlName);
 
         if (!post.isPresent()) {
             return "redirect:/blog";
@@ -175,7 +127,7 @@ public class BlogController {
         model.addAttribute("postContent", post.get().getContent());
         model.addAttribute("submitPath", "/blog/" + postUrlName + "/edit");
 
-        List<String> tags = tagRepository.getAllByPosts(Collections.singleton(post.get())).stream()
+        List<String> tags = tagService.getTags(post.get()).stream()
                 .map(Tag::getName)
                 .collect(Collectors.toList());
         model.addAttribute("tags", tags);
@@ -190,17 +142,14 @@ public class BlogController {
             return "redirect:/blog/{postUrlName}";
         }
 
-        Optional<Post> postOptional = postRepository.getByUrlName(postUrlName);
+        Optional<Post> postOptional = postService.getPostByUrlName(postUrlName);
 
         if (!postOptional.isPresent()) {
             return "redirect:/blog/{postUrlName}";
         }
 
-        Post post = postOptional.get();
-        post.setTitle(blogPost.getPostTitle());
-        post.setContent(blogPost.getPostContent());
-        post.getTags().addAll(blogPost.getAddedTags().stream().map(this::getOrAddTag).collect(Collectors.toSet()));
-        postRepository.save(post);
+        postService.editPost(postOptional.get(), blogPost.getPostTitle(), blogPost.getPostContent(),
+                blogPost.getAddedTags());
 
         return "redirect:/blog/{postUrlName}";
     }
@@ -212,13 +161,13 @@ public class BlogController {
             return "redirect:/blog";
         }
 
-        Optional<Post> post = postRepository.getByUrlName(postUrlName);
+        Optional<Post> post = postService.getPostByUrlName(postUrlName);
 
         if (!post.isPresent()) {
             return "redirect:/blog";
         }
 
-        List<String> tags = tagRepository.getAllByPosts(Collections.singleton(post.get())).stream()
+        List<String> tags = tagService.getTags(post.get()).stream()
                 .map(Tag::getName)
                 .collect(Collectors.toList());
 
@@ -236,22 +185,13 @@ public class BlogController {
             return "redirect:/blog/{postUrlName}";
         }
 
-        Optional<Post> postOptional = postRepository.getByUrlName(postUrlName);
+        Optional<Post> postOptional = postService.getPostByUrlName(postUrlName);
 
         if (!postOptional.isPresent()) {
             return "redirect:/blog/{postUrlName}";
         }
 
-        Post post = postOptional.get();
-
-        PostUpdate postUpdate = new PostUpdate();
-        postUpdate.setPost(post);
-        postUpdate.setContent(blogPostUpdate.getPostContent());
-        postUpdate.setUpdatedDateTime(LocalDateTime.now());
-        postUpdateRepository.save(postUpdate);
-
-        post.getPostUpdates().add(postUpdate);
-        postRepository.save(post);
+        postUpdateService.addPostUpdate(postOptional.get(), blogPostUpdate.getPostContent(), LocalDateTime.now());
 
         return "redirect:/blog/{postUrlName}";
     }
@@ -280,25 +220,9 @@ public class BlogController {
             return "redirect:/blog";
         }
 
-        Set<Tag> tags = blogPost.getAddedTags().stream().map(this::getOrAddTag).collect(Collectors.toSet());
-
-        Post post = new Post(
-                UUID.randomUUID(),
-                blogPost.getPostTitle().replaceAll("\\s", "-"),
-                blogPost.getPostTitle(),
-                blogPost.getPostContent(),
-                LocalDateTime.now(),
-                tags);
-        postRepository.save(post);
+        postService.addPost(UUID.randomUUID(), blogPost.getPostTitle(), blogPost.getPostContent(), LocalDateTime.now(),
+                blogPost.getAddedTags());
 
         return "redirect:/blog";
-    }
-
-    private Tag getOrAddTag(String tagName) {
-        Tag tag = new Tag();
-        tag.setName(tagName);
-
-        Optional<Tag> existingTag = tagRepository.findOne(Example.of(tag));
-        return existingTag.orElseGet(() -> tagRepository.save(tag));
     }
 }
