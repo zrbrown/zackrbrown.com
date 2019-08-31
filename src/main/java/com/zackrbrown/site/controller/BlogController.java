@@ -5,6 +5,8 @@ import com.zackrbrown.site.dao.Post;
 import com.zackrbrown.site.dao.Tag;
 import com.zackrbrown.site.model.FormBlogPost;
 import com.zackrbrown.site.model.FormBlogPostUpdate;
+import com.zackrbrown.site.model.Permissions;
+import com.zackrbrown.site.service.AuthorizationService;
 import com.zackrbrown.site.service.PostService;
 import com.zackrbrown.site.service.PostUpdateService;
 import com.zackrbrown.site.service.TagService;
@@ -35,12 +37,15 @@ public class BlogController {
     private final PostService postService;
     private final PostUpdateService postUpdateService;
     private final TagService tagService;
+    private final AuthorizationService authorizationService;
 
-    public BlogController(BaseConfig config, PostService postService, PostUpdateService postUpdateService, TagService tagService) {
+    public BlogController(BaseConfig config, PostService postService, PostUpdateService postUpdateService,
+                          TagService tagService, AuthorizationService authorizationService) {
         this.config = config;
         this.postService = postService;
         this.postUpdateService = postUpdateService;
         this.tagService = tagService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping
@@ -104,8 +109,7 @@ public class BlogController {
 
     @GetMapping("/{postUrlName}/edit")
     public String editPost(@PathVariable String postUrlName, Principal principal, Model model) {
-        // TODO pull from config
-        if (!"zrbrown".equals(principal.getName())) {
+        if (!authorizationService.isAuthorized(principal, Permissions.EDIT_POST)) {
             return "redirect:/blog";
         }
 
@@ -129,8 +133,7 @@ public class BlogController {
 
     @PostMapping("/{postUrlName}/edit")
     public String submitPostEdit(@PathVariable String postUrlName, FormBlogPost blogPost, Principal principal) {
-        // TODO pull from config
-        if (!"zrbrown".equals(principal.getName())) {
+        if (!authorizationService.isAuthorized(principal, Permissions.EDIT_POST)) {
             return "redirect:/blog/{postUrlName}";
         }
 
@@ -148,8 +151,7 @@ public class BlogController {
 
     @GetMapping("/{postUrlName}/update")
     public String updatePost(@PathVariable String postUrlName, Principal principal, Model model) {
-        // TODO pull from config
-        if (!"zrbrown".equals(principal.getName())) {
+        if (!authorizationService.isAuthorized(principal, Permissions.UPDATE_POST)) {
             return "redirect:/blog";
         }
 
@@ -172,8 +174,7 @@ public class BlogController {
 
     @PostMapping("/{postUrlName}/update")
     public String submitPostUpdate(@PathVariable String postUrlName, FormBlogPostUpdate blogPostUpdate, Principal principal) {
-        // TODO pull from config
-        if (!"zrbrown".equals(principal.getName())) {
+        if (!authorizationService.isAuthorized(principal, Permissions.UPDATE_POST)) {
             return "redirect:/blog/{postUrlName}";
         }
 
@@ -190,8 +191,7 @@ public class BlogController {
 
     @GetMapping("/add")
     public String addPost(Principal principal, Model model) {
-        // TODO pull from config
-        if (!"zrbrown".equals(principal.getName())) {
+        if (!authorizationService.isAuthorized(principal, Permissions.ADD_POST)) {
             return "redirect:/blog";
         }
 
@@ -207,8 +207,7 @@ public class BlogController {
     // TODO use RETHROW in production
     @PostMapping("/add")
     public String submitPost(FormBlogPost blogPost, Principal principal) {
-        // TODO pull from config
-        if (!"zrbrown".equals(principal.getName())) {
+        if (!authorizationService.isAuthorized(principal, Permissions.ADD_POST)) {
             return "redirect:/blog";
         }
 
