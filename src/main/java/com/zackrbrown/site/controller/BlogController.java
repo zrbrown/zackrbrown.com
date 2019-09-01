@@ -51,19 +51,7 @@ public class BlogController {
     @GetMapping
     public String latestBlog(Model model) {
         Optional<Post> latestPost = postService.getLatestPost();
-        if (latestPost.isPresent()) {
-            model.addAttribute("postUpdates", postUpdateService.getFormattedPostUpdates(latestPost.get()));
-
-            List<String> tags = tagService.getTags(latestPost.get()).stream()
-                    .map(Tag::getName)
-                    .collect(Collectors.toList());
-            renderPost(model, latestPost.get(), tags);
-
-            Optional<Post> previousPost = postService.getPreviousPost(latestPost.get());
-            model.addAttribute("showPrevious", previousPost.isPresent());
-            previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
-            model.addAttribute("showNext", false);
-        }
+        latestPost.ifPresent(post -> applyPostToModel(post, model, true, false));
 
         return "blog";
     }
@@ -73,25 +61,38 @@ public class BlogController {
         Optional<Post> requestedPost = postService.getPostByUrlName(postUrlName);
 
         if (requestedPost.isPresent()) {
-            model.addAttribute("postUpdates", postUpdateService.getFormattedPostUpdates(requestedPost.get()));
-
-            List<String> tags = tagService.getTags(requestedPost.get()).stream()
-                    .map(Tag::getName)
-                    .collect(Collectors.toList());
-            renderPost(model, requestedPost.get(), tags);
-
-            Optional<Post> previousPost = postService.getPreviousPost(requestedPost.get());
-            model.addAttribute("showPrevious", previousPost.isPresent());
-            previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
-
-            Optional<Post> nextPost = postService.getNextPost(requestedPost.get());
-            model.addAttribute("showNext", nextPost.isPresent());
-            nextPost.ifPresent(p -> model.addAttribute("nextPost", p.getUrlName()));
+            applyPostToModel(requestedPost.get(), model, true, true);
         } else {
             return "redirect:/blog";
         }
 
         return "blog";
+    }
+
+    private void applyPostToModel(Post requestedPost, Model model, boolean showPreviousButton,
+                                  boolean showNextButton) {
+        model.addAttribute("postUpdates", postUpdateService.getFormattedPostUpdates(requestedPost));
+
+        List<String> tags = tagService.getTags(requestedPost).stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
+        renderPost(model, requestedPost, tags);
+
+        if (showPreviousButton) {
+            Optional<Post> previousPost = postService.getPreviousPost(requestedPost);
+            model.addAttribute("showPrevious", previousPost.isPresent());
+            previousPost.ifPresent(p -> model.addAttribute("previousPost", p.getUrlName()));
+        } else {
+            model.addAttribute("showPrevious", false);
+        }
+
+        if (showNextButton) {
+            Optional<Post> nextPost = postService.getNextPost(requestedPost);
+            model.addAttribute("showNext", nextPost.isPresent());
+            nextPost.ifPresent(p -> model.addAttribute("nextPost", p.getUrlName()));
+        } else {
+            model.addAttribute("showNext", false);
+        }
     }
 
     private void renderPost(Model model, Post post, List<String> tags) {
