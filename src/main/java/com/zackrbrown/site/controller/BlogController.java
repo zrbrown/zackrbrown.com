@@ -99,7 +99,7 @@ public class BlogController {
     }
 
     @GetMapping("/{postUrlName}/edit")
-    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    @PreAuthorize("@baseConfig.authorizedUsers.contains(authentication.userAuthentication.principal)")
     public String editPost(@PathVariable String postUrlName, Model model) {
         Optional<Post> post = postService.getPostByUrlName(postUrlName);
 
@@ -118,7 +118,7 @@ public class BlogController {
     }
 
     @PostMapping("/{postUrlName}/edit")
-    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    @PreAuthorize("@baseConfig.authorizedUsers.contains(authentication.userAuthentication.principal)")
     public String submitPostEdit(@PathVariable String postUrlName, FormBlogPost blogPost) {
         Optional<Post> postOptional = postService.getPostByUrlName(postUrlName);
 
@@ -133,7 +133,7 @@ public class BlogController {
     }
 
     @GetMapping("/{postUrlName}/update")
-    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    @PreAuthorize("@baseConfig.authorizedUsers.contains(authentication.userAuthentication.principal)")
     public String updatePost(@PathVariable String postUrlName, Model model) {
         Optional<Post> post = postService.getPostByUrlName(postUrlName);
 
@@ -151,7 +151,7 @@ public class BlogController {
     }
 
     @PostMapping("/{postUrlName}/update")
-    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    @PreAuthorize("@baseConfig.authorizedUsers.contains(authentication.userAuthentication.principal)")
     public String submitPostUpdate(@PathVariable String postUrlName, FormBlogPostUpdate blogPostUpdate) {
         Optional<Post> postOptional = postService.getPostByUrlName(postUrlName);
 
@@ -165,7 +165,7 @@ public class BlogController {
     }
 
     @GetMapping("/add")
-    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    @PreAuthorize("@baseConfig.authorizedUsers.contains(authentication.userAuthentication.principal)")
     public String addPost(Model model) {
         model.addAttribute("submitPath", "/blog/add");
         model.addAttribute("ajaxBaseUrl", config.getUrl());
@@ -175,7 +175,7 @@ public class BlogController {
 
     // TODO use RETHROW in production
     @PostMapping("/add")
-    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    @PreAuthorize("@baseConfig.authorizedUsers.contains(authentication.userAuthentication.principal)")
     public String submitPost(FormBlogPost blogPost) {
         postService.addPost(UUID.randomUUID(), blogPost.getPostTitle(), blogPost.getPostContent(), LocalDateTime.now(),
                 blogPost.getAddedTags());

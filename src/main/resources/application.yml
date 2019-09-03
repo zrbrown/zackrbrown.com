@@ -39,7 +39,8 @@ objectStorage:
     region: nyc3
 
 site:
-  url: http://localhost:443
+  url: https://zackrbrown.com
+  authorizedUsers: [zrbrown]
 
 # In production, copy below into production.yml in the root directory and enter secrets
 #  spring:

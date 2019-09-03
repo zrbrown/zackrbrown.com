@@ -16,3 +16,6 @@ objectStorage:
   imageBucket:
     accessKeyId: x
     secretAccessKey: x
+
+site:
+  url: http://localhost:8000
