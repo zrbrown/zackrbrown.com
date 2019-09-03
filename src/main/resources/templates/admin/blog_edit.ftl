@@ -33,13 +33,15 @@
         <input title="Tag name entry" type="text" class="add-tag-text" name="addTag" id="addTagInput"/>
         <button title="Add tag" type="button" onclick="addTagToTags()">Add tag</button>
         <div class="tag-container" id="tagContainer">
-            <#list tags>
-                <#items as tag>
-                    <div class="tag-wrapper">
-                        <span class="tag">${tag}</span><a href="" class="tag tag-remove">&#9447;</a>
-                    </div>
-                </#items>
-            </#list>
+            <#if tags??>
+                <#list tags>
+                    <#items as tag>
+                        <div class="tag-wrapper">
+                            <span class="tag">${tag}</span><a href="" class="tag tag-remove">&#9447;</a>
+                        </div>
+                    </#items>
+                </#list>
+            </#if>
         </div>
         <div class="post-action-container">
             <button type="submit" class="post-action">Post</button>

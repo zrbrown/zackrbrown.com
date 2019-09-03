@@ -1,3 +1,18 @@
 server:
+  port: 8000
   ssl:
     enabled: false
+
+spring:
+  datasource:
+    url: x
+
+security:
+  oauth2:
+    client:
+      clientSecret: x
+
+objectStorage:
+  imageBucket:
+    accessKeyId: x
+    secretAccessKey: x

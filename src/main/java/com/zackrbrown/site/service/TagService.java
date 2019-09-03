@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class TagService {
@@ -17,7 +18,9 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public Set<Tag> getTags(Post post) {
-        return tagRepository.getAllByPosts(Collections.singleton(post));
+    public Set<String> getTags(Post post) {
+        return tagRepository.getAllByPosts(Collections.singleton(post)).stream()
+                .map(Tag::getName)
+                .collect(Collectors.toSet());
     }
 }

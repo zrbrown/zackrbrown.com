@@ -2,17 +2,15 @@ package com.zackrbrown.site.controller;
 
 import com.zackrbrown.site.config.BaseConfig;
 import com.zackrbrown.site.dao.Post;
-import com.zackrbrown.site.dao.Tag;
 import com.zackrbrown.site.model.FormBlogPost;
 import com.zackrbrown.site.model.FormBlogPostUpdate;
-import com.zackrbrown.site.model.Permissions;
-import com.zackrbrown.site.service.AuthorizationService;
 import com.zackrbrown.site.service.PostService;
 import com.zackrbrown.site.service.PostUpdateService;
 import com.zackrbrown.site.service.TagService;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/blog")
@@ -37,15 +32,13 @@ public class BlogController {
     private final PostService postService;
     private final PostUpdateService postUpdateService;
     private final TagService tagService;
-    private final AuthorizationService authorizationService;
 
     public BlogController(BaseConfig config, PostService postService, PostUpdateService postUpdateService,
-                          TagService tagService, AuthorizationService authorizationService) {
+                          TagService tagService) {
         this.config = config;
         this.postService = postService;
         this.postUpdateService = postUpdateService;
         this.tagService = tagService;
-        this.authorizationService = authorizationService;
     }
 
     @GetMapping
@@ -62,20 +55,17 @@ public class BlogController {
 
         if (requestedPost.isPresent()) {
             applyPostToModel(requestedPost.get(), model, true, true);
-        } else {
-            return "redirect:/blog";
+            return "blog";
         }
 
-        return "blog";
+        return "redirect:/blog";
     }
 
     private void applyPostToModel(Post requestedPost, Model model, boolean showPreviousButton,
                                   boolean showNextButton) {
         model.addAttribute("postUpdates", postUpdateService.getFormattedPostUpdates(requestedPost));
 
-        List<String> tags = tagService.getTags(requestedPost).stream()
-                .map(Tag::getName)
-                .collect(Collectors.toList());
+        Set<String> tags = tagService.getTags(requestedPost);
         renderPost(model, requestedPost, tags);
 
         if (showPreviousButton) {
@@ -95,7 +85,7 @@ public class BlogController {
         }
     }
 
-    private void renderPost(Model model, Post post, List<String> tags) {
+    private void renderPost(Model model, Post post, Set<String> tags) {
         model.addAttribute("postTitle", post.getTitle());
         model.addAttribute("postDate", post.getCreatedDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE));
 
@@ -109,11 +99,8 @@ public class BlogController {
     }
 
     @GetMapping("/{postUrlName}/edit")
-    public String editPost(@PathVariable String postUrlName, Principal principal, Model model) {
-        if (!authorizationService.isAuthorized(principal, Permissions.EDIT_POST)) {
-            return "redirect:/blog";
-        }
-
+    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    public String editPost(@PathVariable String postUrlName, Model model) {
         Optional<Post> post = postService.getPostByUrlName(postUrlName);
 
         if (!post.isPresent()) {
@@ -124,20 +111,15 @@ public class BlogController {
         model.addAttribute("postContent", post.get().getContent());
         model.addAttribute("submitPath", "/blog/" + postUrlName + "/edit");
 
-        List<String> tags = tagService.getTags(post.get()).stream()
-                .map(Tag::getName)
-                .collect(Collectors.toList());
+        Set<String> tags =  tagService.getTags(post.get());
         model.addAttribute("tags", tags);
 
         return "admin/blog_edit";
     }
 
     @PostMapping("/{postUrlName}/edit")
-    public String submitPostEdit(@PathVariable String postUrlName, FormBlogPost blogPost, Principal principal) {
-        if (!authorizationService.isAuthorized(principal, Permissions.EDIT_POST)) {
-            return "redirect:/blog/{postUrlName}";
-        }
-
+    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    public String submitPostEdit(@PathVariable String postUrlName, FormBlogPost blogPost) {
         Optional<Post> postOptional = postService.getPostByUrlName(postUrlName);
 
         if (!postOptional.isPresent()) {
@@ -151,20 +133,15 @@ public class BlogController {
     }
 
     @GetMapping("/{postUrlName}/update")
-    public String updatePost(@PathVariable String postUrlName, Principal principal, Model model) {
-        if (!authorizationService.isAuthorized(principal, Permissions.UPDATE_POST)) {
-            return "redirect:/blog";
-        }
-
+    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    public String updatePost(@PathVariable String postUrlName, Model model) {
         Optional<Post> post = postService.getPostByUrlName(postUrlName);
 
         if (!post.isPresent()) {
             return "redirect:/blog";
         }
 
-        List<String> tags = tagService.getTags(post.get()).stream()
-                .map(Tag::getName)
-                .collect(Collectors.toList());
+        Set<String> tags = tagService.getTags(post.get());
 
         renderPost(model, post.get(), tags);
 
@@ -174,11 +151,8 @@ public class BlogController {
     }
 
     @PostMapping("/{postUrlName}/update")
-    public String submitPostUpdate(@PathVariable String postUrlName, FormBlogPostUpdate blogPostUpdate, Principal principal) {
-        if (!authorizationService.isAuthorized(principal, Permissions.UPDATE_POST)) {
-            return "redirect:/blog/{postUrlName}";
-        }
-
+    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    public String submitPostUpdate(@PathVariable String postUrlName, FormBlogPostUpdate blogPostUpdate) {
         Optional<Post> postOptional = postService.getPostByUrlName(postUrlName);
 
         if (!postOptional.isPresent()) {
@@ -191,13 +165,9 @@ public class BlogController {
     }
 
     @GetMapping("/add")
-    public String addPost(Principal principal, Model model) {
-        if (!authorizationService.isAuthorized(principal, Permissions.ADD_POST)) {
-            return "redirect:/blog";
-        }
-
+    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    public String addPost(Model model) {
         model.addAttribute("submitPath", "/blog/add");
-        model.addAttribute("tags", Collections.emptyList());
         model.addAttribute("ajaxBaseUrl", config.getUrl());
 
         return "admin/blog_edit";
@@ -205,11 +175,8 @@ public class BlogController {
 
     // TODO use RETHROW in production
     @PostMapping("/add")
-    public String submitPost(FormBlogPost blogPost, Principal principal) {
-        if (!authorizationService.isAuthorized(principal, Permissions.ADD_POST)) {
-            return "redirect:/blog";
-        }
-
+    @PreAuthorize("'zrbrown' == authentication.userAuthentication.principal")
+    public String submitPost(FormBlogPost blogPost) {
         postService.addPost(UUID.randomUUID(), blogPost.getPostTitle(), blogPost.getPostContent(), LocalDateTime.now(),
                 blogPost.getAddedTags());
 
