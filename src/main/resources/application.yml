@@ -1,36 +1,6 @@
-server:
-  port: 443
-  ssl:
-    enabled: true
-    key-store: /etc/keystore.p12
-    key-store-password:
-    keyStoreType: PKCS12
-    keyAlias: tomcat
+spring.jpa.properties.hibernate.default_schema: application
 
-spring:
-  freemarker:
-    template-loader-path: classpath:/templates
-    suffix: .ftl
-  datasource:
-    platform: postgres
-    username: postgres
-    password: postgres
-  jpa.properties.hibernate:
-    dialect: org.hibernate.dialect.PostgreSQLDialect
-    default_schema: application
-    jdbc.lob.non_contextual_creation: true
-  servlet.multipart:
-    max-file-size: 10MB
-
-security:
-  oauth2:
-    client:
-      clientId: Iv1.a4cf7da0a75e9d81
-      accessTokenUri: https://github.com/login/oauth/access_token
-      userAuthorizationUri: https://github.com/login/oauth/authorize
-      clientAuthenticationScheme: form
-    resource:
-      userInfoUri: https://api.github.com/user
+security.oauth2.client.clientId: Iv1.a4cf7da0a75e9d81
 
 objectStorage:
   imageBucket:
@@ -42,19 +12,6 @@ site:
   url: https://zackrbrown.com
   authorizedUsers: [zrbrown]
 
-# In production, copy below into production.yml in the root directory and enter secrets
-#  spring:
-#    datasource:
-#      url: x
-#      username: x
-#      password: x
-#
-#  security:
-#    oauth2:
-#      client:
-#        clientSecret: x
-#
-#  objectStorage:
-#    imageBucket:
-#      accessKeyId: x
-#      secretAccessKey: x
+staticContent.markdownToName:
+  projects: Projects
+  about: About

@@ -9,8 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>zackrbrown.com websitep</name>
-    <!-- FIXME change it to the project's website -->
+    <name>zackrbrown.com website</name>
     <url>http://zackrbrown.com</url>
 
     <parent>
@@ -20,6 +19,11 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>net.eightlives</groupId>
+            <artifactId>mindy</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -48,27 +52,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.commonmark</groupId>
-            <artifactId>commonmark</artifactId>
-            <version>0.12.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>auth</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>s3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
         </dependency>
         <!-- tag::actuator[] -->
         <dependency>
@@ -85,21 +71,8 @@
         <!-- end::tests[] -->
     </dependencies>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>bom</artifactId>
-                <version>2.6.3</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <properties>
         <java.version>1.8</java.version>
-        <!--<azure.version>0.2.0</azure.version>-->
     </properties>
 
     <build>
