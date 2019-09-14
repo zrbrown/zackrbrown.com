@@ -8,9 +8,10 @@ objectStorage:
     url: https://zackrbrown.nyc3.digitaloceanspaces.com
     region: nyc3
 
-site:
-  url: https://zackrbrown.com
-  authorizedUsers: [zrbrown]
+site.url: https://zackrbrown.com
+
+userAuthorization.userPermissions:
+  zrbrown: POST_ADD, POST_EDIT, POST_UPDATE
 
 staticContent.markdownToName:
   projects: Projects
