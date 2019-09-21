@@ -10,6 +10,7 @@ spring:
 security:
   oauth2:
     client:
+      clientId: Iv1.68c92063aa61085c
       clientSecret: x
 
 objectStorage:
