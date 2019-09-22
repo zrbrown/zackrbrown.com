@@ -8,4 +8,4 @@ mvn jar:jar
 docker build --tag zackrbrown .
 
 # Create Docker container
-docker create --mount 'type=bind,src=/etc/mindy/config,dst=/app/mindyExternalConfig' -p 443:443 -p 80:80 zackrbrown
+docker create --mount 'type=bind,src=/etc/mindy/config,dst=/app/config' -p 443:443 -p 80:80 zackrbrown
