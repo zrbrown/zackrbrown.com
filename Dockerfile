@@ -7,4 +7,4 @@ COPY production.yml /app
 COPY keystore.p12 /etc
 EXPOSE 80
 EXPOSE 443
-ENTRYPOINT ["java","-Dspring.config.name=mindy,application,production","-cp","app:app/lib/*","com.zackrbrown.site.Application"]
+ENTRYPOINT ["java","-Dspring.config.additional-location=classpath:/mindyExternalConfig/user-authorization.yml","-Dspring.config.name=mindy,application,production","-cp","app:app/lib/*","com.zackrbrown.site.Application"]

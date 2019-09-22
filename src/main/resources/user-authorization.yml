@@ -1,0 +1,2 @@
+userAuthorization.userPermissions:
+  zrbrown: ADMIN, POST_ADMIN, POST_ADD, POST_EDIT, POST_UPDATE
