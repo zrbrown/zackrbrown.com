@@ -1,1 +1,0 @@
-<a href="/blog"><img id="header-logo" src="/images/zackrbrowncom-logo-web.png" alt="Header logo"/></a>
