@@ -1,8 +1,13 @@
+FROM maven:3.6.2-jdk-12
+ARG BUILDSRC=/buildsrc
+COPY ./ ${BUILDSRC}
+RUN mvn clean package && mvn jar:jar
+
 FROM openjdk:12-alpine
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
+ARG DEPENDENCY=${BUILDSRC}/target/dependency
+COPY --from=0 ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=0 ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=0 ${DEPENDENCY}/BOOT-INF/classes /app
 COPY keystore.p12 /etc
 EXPOSE 80
 EXPOSE 443
