@@ -1,4 +1,13 @@
 FROM maven:3.6.2-jdk-12
+RUN git clone https://github.com/zrbrown/friendly-ssl.git
+WORKDIR /friendly-ssl
+RUN mvn clean install
+ARG BUILDSRC=/buildsrc
+COPY ./ ${BUILDSRC}
+WORKDIR ${BUILDSRC}
+RUN mvn clean package && mvn jar:jar
+
+FROM maven:3.6.2-jdk-12
 RUN git clone https://github.com/zrbrown/mindy.git
 WORKDIR /mindy
 RUN mvn clean install
