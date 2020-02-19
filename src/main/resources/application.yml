@@ -1,6 +1,6 @@
-spring.jpa.properties.hibernate.default_schema: application
-
-security.oauth2.client.clientId: Iv1.a4cf7da0a75e9d81
+spring:
+  jpa.properties.hibernate.default_schema: application
+  security.oauth2.client.registration.github.client-id: Iv1.a4cf7da0a75e9d81
 
 objectStorage:
   imageBucket:
