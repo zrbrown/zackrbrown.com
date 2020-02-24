@@ -4,14 +4,9 @@ server:
     enabled: false
 
 spring:
-  datasource:
-    url: x
-
-security:
-  oauth2:
-    client:
-      clientId: Iv1.68c92063aa61085c
-      clientSecret: x
+  datasource.url: x
+  security.oauth2.client.registration.github.client-id: Iv1.68c92063aa61085c
+  security.oauth2.client.registration.github.client-secret: x
 
 objectStorage:
   imageBucket:
