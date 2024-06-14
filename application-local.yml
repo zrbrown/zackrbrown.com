@@ -1,0 +1,22 @@
+server:
+  port: 8000
+  ssl:
+    enabled: false
+
+spring:
+  datasource.url: jdbc:postgresql://localhost:5432/zack
+  datasource.username: zack
+  datasource.password: zack
+  security.oauth2.client.registration.github.client-id: x
+  security.oauth2.client.registration.github.client-secret: x
+
+objectStorage:
+  imageBucket:
+    name: images
+    url: http://localhost:4566
+    region: us-west-2
+    accessKeyId: x
+    secretAccessKey: x
+
+site:
+  url: http://localhost:8000

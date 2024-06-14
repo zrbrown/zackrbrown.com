@@ -53,11 +53,11 @@ button:active {
 }
 
 .headerIcon {
-    color: #556699;
+    filter: brightness(0) saturate(100%) invert(40%) sepia(11%) saturate(2032%) hue-rotate(188deg) brightness(91%) contrast(82%);
 }
 
 .headerIcon:hover {
-    color: #7788BB;
+    filter: brightness(0) saturate(100%) invert(54%) sepia(12%) saturate(1110%) hue-rotate(188deg) brightness(97%) contrast(95%);
 }
 
 .content-container {
@@ -85,25 +85,25 @@ button:active {
     color: #000088;
 }
 
-.mindy-md-heading {
+.mindecrire-md-heading {
     color: #445588;
 }
 
-.mindy-md-block-quote {
+.mindecrire-md-block-quote {
     background-color: #DDDDDD;
-    padding:2px 0 2px 7px;
+    padding: .1em 1em;
 }
 
-.mindy-md-code,
-.mindy-md-fenced-code-block {
-    background-color: #000083;
+.mindecrire-md-code,
+.mindecrire-md-fenced-code-block {
+    background-color: #333333;
     color: #C4E9FF;
 }
 
-.mindy-md-code {
-    padding: 1px 3px;
+.mindecrire-md-code {
+    padding: .2em .4em;
 }
 
-.mindy-md-fenced-code-block {
-    padding: 0 20px 20px 0;
+pre.mindecrire-md-fenced-code-block {
+    padding: 1em;
 }
