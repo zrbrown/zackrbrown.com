@@ -1,9 +1,4 @@
 FROM maven:3.6.2-jdk-12
-#
-COPY ./mindecrire /mindecrire
-WORKDIR /mindecrire
-RUN mvn clean install -DskipTests
-#
 ARG BUILDSRC=/buildsrc
 COPY ./ ${BUILDSRC}
 WORKDIR ${BUILDSRC}
