@@ -1,2 +1,2 @@
-# zackrbrown.com
+# [zackrbrown.com](zackrbrown.com)
 Personal website
