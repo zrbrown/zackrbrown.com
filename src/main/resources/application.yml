@@ -1,11 +1,10 @@
 spring:
-  jpa.properties.hibernate.default_schema: application
   security.oauth2.client.registration.github.client-id: Iv1.a4cf7da0a75e9d81
 
 objectStorage:
   imageBucket:
-    name: images
-    url: https://zackrbrown.nyc3.digitaloceanspaces.com
+    name: zackrbrown
+    url: https://nyc3.digitaloceanspaces.com
     region: nyc3
 
 site.url: https://zackrbrown.com

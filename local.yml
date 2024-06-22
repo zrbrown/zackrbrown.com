@@ -7,8 +7,6 @@ spring:
   datasource.url: jdbc:postgresql://localhost:5432/zack
   datasource.username: zack
   datasource.password: zack
-  security.oauth2.client.registration.github.client-id: x
-  security.oauth2.client.registration.github.client-secret: x
 
 objectStorage:
   imageBucket:
@@ -20,3 +18,6 @@ objectStorage:
 
 site:
   url: http://localhost:8000
+
+userAuthorization.userPermissions:
+  zrbrown: ADMIN, POST_ADMIN, POST_ADD, POST_EDIT, POST_UPDATE
