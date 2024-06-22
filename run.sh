@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+docker build -t zackrbrown .
+
 docker run \
 -d \
 --mount "type=bind,src=/etc/mindecrire/config,dst=/app/config" \
