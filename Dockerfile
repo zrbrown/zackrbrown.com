@@ -1,10 +1,10 @@
-FROM maven:3.6.2-jdk-12
+FROM maven:3.9.15-eclipse-temurin-25-alpine
 ARG BUILDSRC=/buildsrc
 COPY ./ ${BUILDSRC}
 WORKDIR ${BUILDSRC}
 RUN mvn clean package
 
-FROM openjdk:12-alpine
+FROM eclipse-temurin:22.0.2_9-jdk-alpine
 ARG DEPENDENCY=/buildsrc/target/dependency
 COPY --from=0 ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=0 ${DEPENDENCY}/META-INF /app/META-INF

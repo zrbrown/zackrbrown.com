@@ -1,9 +1,9 @@
 server:
   port: 8000
-  ssl:
-    enabled: false
+  ssl.enabled: false
 
 spring:
+  ssl.bundle.jks.mindecrire.keystore.location: keystore.p12
   datasource.url: jdbc:postgresql://localhost:5432/zack
   datasource.username: zack
   datasource.password: zack
